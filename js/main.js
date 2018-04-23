@@ -175,7 +175,7 @@ createRestaurantHTML = (restaurant) => {
     /img/${id}-300w.jpg,
     /img/${id}-600w.jpg 2x
   `;
-  image.alt = 'Picture from restaurant';
+  image.alt = `Picture from ${restaurant.name} restaurant`;
   image.tabIndex = 0;
   li.append(image);
 
@@ -184,7 +184,7 @@ createRestaurantHTML = (restaurant) => {
   name.setAttribute('aria-label', `Restaurant name is ${restaurant.name}`);
   name.innerHTML = restaurant.name;
   li.append(name);
-  
+
   const neighborhood = document.createElement('p');
   neighborhood.tabIndex = 0;
   neighborhood.setAttribute('aria-label', `Restaurant neighborhood is ${restaurant.neighborhood}`);

@@ -77,6 +77,7 @@ fillRestaurantHTML = (restaurant = self.restaurant) => {
     /img/${id}-600w.jpg 1.5x,
     /img/${id}-800w.jpg 2x
   `;
+  image.alt = `Picture from ${restaurant.name} restaurant`;
 
   const cuisine = document.getElementById('restaurant-cuisine');
   cuisine.setAttribute('aria-label', `Restaurant's cuisine is ${restaurant.cuisine_type}`);
@@ -196,6 +197,6 @@ getParameterByName = (name, url) => {
   const results = regex.exec(url);
   if (!results) return null;
   if (!results[2]) return '';
-  
+
   return decodeURIComponent(results[2].replace(/\+/g, ' '));
 }
