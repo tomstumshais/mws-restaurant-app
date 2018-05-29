@@ -53,8 +53,8 @@ To run Node web server:
 
 ## Authors
 
-* [Web app source code template](https://github.com/udacity/mws-restaurant-stage-1)
-* [Server source code](https://github.com/udacity/mws-restaurant-stage-2)
+* [Starter code for project](https://github.com/udacity/mws-restaurant-stage-1)
+* [Web server code](https://github.com/udacity/mws-restaurant-stage-2)
 * [Toms Tumshais](https://github.com/tomstumshais)
 
 ## Acknowledgments
