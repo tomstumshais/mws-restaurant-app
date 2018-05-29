@@ -47,8 +47,8 @@ To run Node web server:
 
 ## Built With
 
-* HTML
-* CSS
+* HTML5
+* CSS3
 * JavaScript
 
 ## Authors
