@@ -41,8 +41,8 @@ With your server running, visit the site: `http://{host}:{port}`, `host` and `po
 To run Node web server:
 * install [Node & npm](https://nodejs.org/en/)
 * go to ./server directory
-* run `npm install` to install dependencies
-* run `npm install sails@0.12.13 --save` to install necessary Sails version for project
+* run in your CLI command `npm install` to install dependencies
+* run in your CLI command `npm install sails@0.12.13 --save` to install necessary Sails version for project
 * start the server `node server`
 
 ## Built With
