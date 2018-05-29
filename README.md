@@ -10,11 +10,13 @@ Top 1,000 students from the Intermediate Track were awarded with scholarships to
 
 ## Project Overview
 
-In **Stage One**, need take a static design that lacks accessibility and convert the design to be responsive on different sized displays and accessible for screen reader use. Also add a service worker to begin the process of creating a seamless offline experience for users. 
+In **Stage One**, need take a static design that lacks accessibility and convert the design to be responsive on different sized displays and accessible for screen reader use. Also add a service worker to begin the process of creating a seamless offline experience for users.
+
 In **Stage Two**, need to implement web service requests to get real data from service, store those data in IndexedDB to be available in offline mode too. Meet specififations for site performance. Lighthouse targets for each category exceed: 
 * Progressive Web App: >90
 * Performance: >70
 * Accessibility: >90
+
 In **Stage Three**, ... (I am not yet started it, will update it later)
 
 ## Getting Started
