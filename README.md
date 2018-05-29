@@ -57,4 +57,4 @@ To run Node web server:
 
 ## Acknowledgments
 
-* Thanks for [Udacity](https://eu.udacity.com/) & [Google](https://www.google.com/) to gave me this opportunity to partipicate in Mobile Web Specialist Nanodegree program.
+* Thanks for [Udacity](https://eu.udacity.com/) & [Google](https://www.google.com/) to give me this opportunity to partipicate in Mobile Web Specialist Nanodegree program.
