@@ -9,9 +9,7 @@ class DBHelper {
    */
   static get DATABASE_URL() {
     // Change this to your local server URL
-    // const url = 'http://127.0.0.1:8887';
-    const url = 'http://localhost:1337/restaurants';
-    return url;
+    return 'http://localhost:1337/restaurants';
   }
 
   /**
