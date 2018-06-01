@@ -4,34 +4,6 @@ var map;
 /**
  * Initialize Google map, called from HTML.
  */
-// window.initMap = () => {
-//   fetchRestaurantFromURL((error, restaurant) => {
-//     if (error) { // Got an error!
-//       console.error(error);
-//     } else {
-//       self.map = new google.maps.Map(document.getElementById('map'), {
-//         zoom: 16,
-//         center: restaurant.latlng,
-//         scrollwheel: false
-//       });
-
-//       // set title for all iframe elements in Google Maps container
-//       google.maps.event.addListenerOnce(self.map, 'idle', () => {
-//         const mapFrames = document.querySelectorAll('#map iframe');
-//         mapFrames.forEach((frame) => {
-//           frame.setAttribute('title', 'Google Maps');
-//         });
-//       });
-
-//       fillBreadcrumb();
-//       DBHelper.mapMarkerForRestaurant(self.restaurant, self.map);
-//     }
-//   });
-// }
-
-/**
- * Initialize Google map, called from HTML.
- */
 window.initMap = () => {
   fetchRestaurantFromURL((error, restaurant) => {
     if (error) { // Got an error!
@@ -56,32 +28,6 @@ window.initMap = () => {
     }
   });
 }
-
-/**
- * Get current restaurant from page URL.
- */
-// fetchRestaurantFromURL = (callback) => {
-//   if (self.restaurant) { // restaurant already fetched!
-//     callback(null, self.restaurant);
-//     return;
-//   }
-
-//   const id = getParameterByName('id');
-//   if (!id) { // no id found in URL
-//     error = 'No restaurant id in URL';
-//     callback(error, null);
-//   } else {
-//     DBHelper.fetchRestaurantById(id, (error, restaurant) => {
-//       self.restaurant = restaurant;
-//       if (!restaurant) {
-//         console.error(error);
-//         return;
-//       }
-//       fillRestaurantHTML();
-//       callback(null, restaurant);
-//     });
-//   }
-// }
 
 /**
  * Get current restaurant from page URL.
