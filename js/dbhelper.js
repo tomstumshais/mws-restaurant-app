@@ -33,8 +33,9 @@ class DBHelper {
       .then(function (response) {
         return response.json();
       })
-      .then(function (myJson) {
-        console.log(myJson);
+      .then(function (restaurantsJSON) {
+        const restaurants = restaurantsJSON;
+        callback(null, restaurants);
       });
   }
 
