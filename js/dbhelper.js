@@ -70,12 +70,16 @@ class DBHelper {
    * Fetch a restaurant by its ID.
    */
   static fetchRestaurantById(id) {
-    return fetch(`${DBHelper.DATABASE_URL}/${id}`)
-      .then(response => {
-        if (response.ok) {
-          return response.json();
+    // fetch all restaurants with proper error handling.
+    return DBHelper.fetchRestaurants()
+      .then(restaurants => {
+        // return restaurants.find(r => r.id == id) || Promise.reject(new Error('Restaurant does not exist'));
+        const restaurant = restaurants.find(r => r.id == id);
+        if (restaurant) { // Got the restaurant
+          return restaurant;
+        } else { // Restaurant does not exist in the database
+          Promise.reject(new Error('Restaurant does not exist'));
         }
-        return Promise.reject(new Error(`Request failed. Returned status of ${response.status}`));
       });
   }
 
