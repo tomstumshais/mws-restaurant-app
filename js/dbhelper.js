@@ -17,7 +17,6 @@ class DBHelper {
   static fetchRestaurants() {
     // IndexedDB actions
     // TODO: read articles
-    // https://developer.mozilla.org/en-US/docs/Web/API/IndexedDB_API/Basic_Concepts_Behind_IndexedDB
     // https://developer.mozilla.org/en-US/docs/Web/API/IndexedDB_API/Using_IndexedDB
     // --------------------------------------------------
     console.log('fetching restaurants');
