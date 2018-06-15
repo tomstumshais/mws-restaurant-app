@@ -16,38 +16,11 @@ class DBHelper {
    */
   static fetchRestaurants() {
     // IndexedDB actions
-    // TODO: read articles
-    // https://developer.mozilla.org/en-US/docs/Web/API/IndexedDB_API/Using_IndexedDB
-    // --------------------------------------------------
-    console.log('fetching restaurants');
-
-    const request = window.indexedDB.open('restaurants-reviews');
-    let db;
-    request.onsuccess = event => {
-      console.log('success');
-      db = event.target.result;
-      console.log(db);
-    };
-    request.onerror = error => {
-      console.log('db error');
-    };
-    request.onupgradeneeded = event => {
-      console.log('db upgrade');
-      db = event.target.result;
-      var objectStore = db.createObjectStore('restaurants', {
+    const dbPromise = idb.open('restaurant-review', 1, (upgradeDB) => {
+      const store = upgradeDB.createObjectStore('restaurants', {
         keyPath: 'id'
       });
-      objectStore.createIndex('name', 'name', {
-        unique: false
-      });
-
-      objectStore.transaction.oncomplete = () => {
-        const restaurantsObjectStore = db
-          .transaction('restaurants-reviews', 'readwrite')
-          .objectStore('restaurants');
-      };
-    };
-    // --------------------------------------------------
+    });
 
     return fetch(DBHelper.DATABASE_URL).then(response => {
       if (response.ok) {
