@@ -17,11 +17,12 @@ class DBHelper {
   static fetchRestaurants() {
     this._dbPromise = DBHelper.openDatabase();
 
-    // TODO: 
+    // TODO:
     // 1. if exists, show restaurants from db
     // 2. call service request to get latest restaurants
     // 3. save latest restaurants to db
     DBHelper.showRestaurantsFromDatabase().then(data => {
+      // get all Restaurants from database
       console.log(data);
     });
 
@@ -42,7 +43,7 @@ class DBHelper {
    * Open Restaurants IndexedDB database.
    */
   static openDatabase() {
-    return idb.open('restaurant-review', 1, (upgradeDB) => {
+    return idb.open('restaurant-review', 1, upgradeDB => {
       const store = upgradeDB.createObjectStore('restaurants', {
         keyPath: 'id'
       });
@@ -54,33 +55,35 @@ class DBHelper {
    * @param {Array} restaurants Array with Restaurants
    */
   static saveRestaurantsToDatabase(restaurants) {
-    this._dbPromise.then(db => {
-      const tx = db.transaction('restaurants', 'readwrite');
-      const store = tx.objectStore('restaurants');
-      // add Restaurants to IndexedDB
-      restaurants.forEach(restaurant => {
-        store.put(restaurant);
-      });
-      return tx.complete;
-    }).then(() => {
-      console.log('Restaurants added to IndexedDB!');
-    }).catch(error => console.error('Error while adding Restaurants to DB', error));
+    this._dbPromise
+      .then(db => {
+        const tx = db.transaction('restaurants', 'readwrite');
+        const store = tx.objectStore('restaurants');
+        // add Restaurants to IndexedDB
+        restaurants.forEach(restaurant => {
+          store.put(restaurant);
+        });
+        return tx.complete;
+      })
+      .then(() => {
+        console.log('Restaurants added to IndexedDB!');
+      })
+      .catch(error => console.error('Error while adding Restaurants to DB', error));
   }
 
   /**
    * Show Restaurants which were saved in IndexedDB.
    */
   static showRestaurantsFromDatabase() {
-    return this._dbPromise.then(function (db) {
+    return this._dbPromise.then(function(db) {
       // if we're already showing posts, eg shift-refresh
       // or the very first load, there's no point fetching
       // posts from IDB
       if (!db) return false;
 
-      const store = db.transaction('restaurants')
-        .objectStore('restaurants');
+      const store = db.transaction('restaurants').objectStore('restaurants');
 
-      return store.getAll().then(function (restaurants) {
+      return store.getAll().then(function(restaurants) {
         return restaurants;
       });
     });
