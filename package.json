@@ -1,0 +1,22 @@
+{
+  "name": "mws-restaurant-app",
+  "version": "1.0.0",
+  "description": "Restaurant Reviews app is a three stage course project for **Mobile Web Specialist Certification Course**. Goal is to incrementally convert a static webpage to a mobile-ready web application.",
+  "main": "Gruntfile.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tomstumshais/mws-restaurant-app.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/tomstumshais/mws-restaurant-app/issues"
+  },
+  "homepage": "https://github.com/tomstumshais/mws-restaurant-app#readme",
+  "dependencies": {
+    "idb": "^2.1.3"
+  }
+}
