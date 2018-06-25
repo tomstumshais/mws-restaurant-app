@@ -16,37 +16,37 @@ const filesToCache = [
 ];
 
 // cache necessary files for offline usage
-self.addEventListener('install', function(event) {
+self.addEventListener('install', function (event) {
   event.waitUntil(
-    caches.open(STATIC_CACHE).then(function(cache) {
+    caches.open(STATIC_CACHE).then(function (cache) {
       return cache.addAll(filesToCache);
     })
   );
 });
 
 // get rid of old caches
-self.addEventListener('activate', function(event) {
+self.addEventListener('activate', function (event) {
   event.waitUntil(
-    caches.keys().then(function(cacheNames) {
+    caches.keys().then(function (cacheNames) {
       return Promise.all(
         cacheNames
-          .filter(function(cacheName) {
-            return (
-              cacheName.startsWith('restaurant-app') &&
-              !ALL_CACHES.includes(cacheName)
-            );
-          })
-          .map(function(cacheName) {
-            // delete caches which are no more active
-            return caches.delete(cacheName);
-          })
+        .filter(function (cacheName) {
+          return (
+            cacheName.startsWith('restaurant-app') &&
+            !ALL_CACHES.includes(cacheName)
+          );
+        })
+        .map(function (cacheName) {
+          // delete caches which are no more active
+          return caches.delete(cacheName);
+        })
       );
     })
   );
 });
 
 // handle all requests
-self.addEventListener('fetch', function(event) {
+self.addEventListener('fetch', function (event) {
   const requestUrl = new URL(event.request.url);
 
   if (requestUrl.origin === location.origin) {
@@ -62,15 +62,19 @@ self.addEventListener('fetch', function(event) {
     }
     // respond to local project file requests
     event.respondWith(
-      caches.match(event.request).then(function(response) {
+      caches.match(event.request).then(function (response) {
         return response || fetchAndCache(event.request, DATA_CACHE);
       })
     );
   } else {
     // respond to remote requests
     event.respondWith(
-      caches.match(event.request).then(function(response) {
+      caches.match(event.request).then(function (response) {
         return response || fetchAndCache(event.request, REMOTE_CACHE);
+      }).catch(error => {
+        // error logging
+        console.log(event);
+        console.error('Failed to fetch!', error);
       })
     );
   }
@@ -85,11 +89,11 @@ function servePhoto(request) {
   var storageUrl = request.url.replace(/-\d+w\.jpg$/, '');
 
   // store images without suffix
-  return caches.open(IMAGE_CACHE).then(function(cache) {
-    return cache.match(storageUrl).then(function(response) {
+  return caches.open(IMAGE_CACHE).then(function (cache) {
+    return cache.match(storageUrl).then(function (response) {
       if (response) return response;
 
-      return fetch(request).then(function(networkResponse) {
+      return fetch(request).then(function (networkResponse) {
         cache.put(storageUrl, networkResponse.clone());
         return networkResponse;
       });
@@ -103,8 +107,8 @@ function servePhoto(request) {
  * @param {String} cacheStorageName Cache storage name
  */
 function fetchAndCache(request, cacheStorageName) {
-  return caches.open(cacheStorageName).then(function(cache) {
-    return fetch(request).then(function(networkResponse) {
+  return caches.open(cacheStorageName).then(function (cache) {
+    return fetch(request).then(function (networkResponse) {
       cache.put(request, networkResponse.clone());
       return networkResponse;
     });
