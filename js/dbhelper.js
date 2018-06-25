@@ -75,7 +75,7 @@ class DBHelper {
    * Show Restaurants which were saved in IndexedDB.
    */
   static showRestaurantsFromDatabase() {
-    return this._dbPromise.then(function(db) {
+    return this._dbPromise.then(function (db) {
       // if we're already showing posts, eg shift-refresh
       // or the very first load, there's no point fetching
       // posts from IDB
@@ -83,7 +83,7 @@ class DBHelper {
 
       const store = db.transaction('restaurants').objectStore('restaurants');
 
-      return store.getAll().then(function(restaurants) {
+      return store.getAll().then(function (restaurants) {
         return restaurants;
       });
     });
