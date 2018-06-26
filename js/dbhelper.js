@@ -19,9 +19,10 @@ class DBHelper {
       this._dbPromise = DBHelper.openDatabase();
     }
 
+    // How to get Restaurants data:
     // 1. if not exists, call service request and return data
     // 2. if exists, return data from database
-    // 3. then call service request and update data in database
+    // 3. then in the background call service request and update data in database
     return DBHelper.getRestaurantsFromDatabase().then(data => {
       // if database is empty then call service to get Restaurants data
       if (!data || !data.length) {
@@ -87,12 +88,12 @@ class DBHelper {
    * Get saved Restaurants from IndexedDB.
    */
   static getRestaurantsFromDatabase() {
-    return this._dbPromise.then(function (db) {
+    return this._dbPromise.then(function(db) {
       if (!db) return false;
 
       const store = db.transaction('restaurants').objectStore('restaurants');
 
-      return store.getAll().then(function (restaurants) {
+      return store.getAll().then(function(restaurants) {
         return restaurants;
       });
     });
