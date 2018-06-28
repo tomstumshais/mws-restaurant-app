@@ -88,12 +88,12 @@ class DBHelper {
    * Get saved Restaurants from IndexedDB.
    */
   static getRestaurantsFromDatabase() {
-    return this._dbPromise.then(function(db) {
+    return this._dbPromise.then(function (db) {
       if (!db) return false;
 
       const store = db.transaction('restaurants').objectStore('restaurants');
 
-      return store.getAll().then(function(restaurants) {
+      return store.getAll().then(function (restaurants) {
         return restaurants;
       });
     });
@@ -193,6 +193,7 @@ class DBHelper {
    * Restaurant image URL.
    */
   static imageUrlForRestaurant(restaurant) {
+    if (!restaurant) return '';
     // default image width
     const PHOTO_WIDTH = '400w';
     // remove at the end '.jpg' to add specific width for current case
