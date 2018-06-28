@@ -153,7 +153,6 @@ fillRestaurantsHTML = (restaurants = self.restaurants) => {
 createRestaurantHTML = restaurant => {
   const id = restaurant.id;
   const li = document.createElement("li");
-  li.tabIndex = 0;
   li.setAttribute("aria-label", `List item for ${restaurant.name} restaurant`);
 
   const image = document.createElement("img");
@@ -165,17 +164,14 @@ createRestaurantHTML = restaurant => {
     /img/${id}-600w.jpg 2x
   `;
   image.alt = `Picture from ${restaurant.name} restaurant`;
-  image.tabIndex = 0;
   li.append(image);
 
   const name = document.createElement("h2");
-  name.tabIndex = 0;
   name.setAttribute("aria-label", `Restaurant name is ${restaurant.name}`);
   name.innerHTML = restaurant.name;
   li.append(name);
 
   const neighborhood = document.createElement("p");
-  neighborhood.tabIndex = 0;
   neighborhood.setAttribute(
     "aria-label",
     `Restaurant neighborhood is ${restaurant.neighborhood}`
@@ -184,7 +180,6 @@ createRestaurantHTML = restaurant => {
   li.append(neighborhood);
 
   const address = document.createElement("p");
-  address.tabIndex = 0;
   address.setAttribute(
     "aria-label",
     `Restaurant address is ${restaurant.address}`

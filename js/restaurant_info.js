@@ -96,12 +96,10 @@ fillRestaurantHoursHTML = (operatingHours = self.restaurant.operating_hours) => 
     const row = document.createElement('tr');
 
     const day = document.createElement('td');
-    day.tabIndex = 0;
     day.innerHTML = key;
     row.appendChild(day);
 
     const time = document.createElement('td');
-    time.tabIndex = 0;
     time.innerHTML = operatingHours[key];
     row.appendChild(time);
 
@@ -120,7 +118,6 @@ fillReviewsHTML = (reviews = self.restaurant.reviews) => {
 
   if (!reviews) {
     const noReviews = document.createElement('p');
-    noReviews.tabIndex = 0;
     noReviews.innerHTML = 'No reviews yet!';
     container.appendChild(noReviews);
     return;
@@ -138,31 +135,26 @@ fillReviewsHTML = (reviews = self.restaurant.reviews) => {
  */
 createReviewHTML = (review) => {
   const li = document.createElement('li');
-  li.tabIndex = 0;
   li.setAttribute('aria-label', 'Review item');
 
   const name = document.createElement('p');
-  name.tabIndex = 0;
   name.setAttribute('aria-label', `Reviewer's name is ${review.name}`);
   name.style.fontWeight = 'bold';
   name.innerHTML = review.name;
   li.appendChild(name);
 
   const date = document.createElement('p');
-  date.tabIndex = 0;
   date.setAttribute('aria-label', `Date of review is ${review.date}`);
   date.innerHTML = review.date;
   date.classList.add('reviews-list__date');
   li.appendChild(date);
 
   const rating = document.createElement('p');
-  rating.tabIndex = 0;
   rating.setAttribute('aria-label', `Reviewer's rating is ${review.rating}`);
   rating.innerHTML = `Rating: ${review.rating}`;
   li.appendChild(rating);
 
   const comments = document.createElement('p');
-  comments.tabIndex = 0;
   comments.setAttribute('aria-label', `Reviewer's comment is ${review.comments}`);
   comments.innerHTML = review.comments;
   li.appendChild(comments);
