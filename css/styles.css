@@ -81,6 +81,7 @@ section {
 }
 
 /* Skip link styling */
+
 .skip-link {
   position: absolute;
   top: -100px;
@@ -230,7 +231,7 @@ nav h1 a {
   min-height: 250px;
 }
 
-#restaurants-list li h1 {
+#restaurants-list li h2 {
   color: #b56000;
   font-family: Arial, sans-serif;
   font-size: 1.5em;
@@ -292,7 +293,7 @@ nav h1 a {
 #restaurant-name {
   color: #804200;
   font-family: Arial, sans-serif;
-  font-size: 1.6em;
+  font-size: 2em;
   font-weight: 200;
   letter-spacing: 0;
   margin: 15px 0 30px;
@@ -339,9 +340,9 @@ nav h1 a {
   padding: 30px 40px 80px;
 }
 
-#reviews-container h2 {
+#reviews-container h3 {
   color: #aa5a00;
-  font-size: 2em;
+  font-size: 1.6em;
   font-weight: 300;
   letter-spacing: -1px;
   padding-bottom: 2px;
@@ -402,7 +403,7 @@ nav h1 a {
   #restaurants-list .restaurant-img {
     min-height: 200px;
   }
-  #restaurants-list li h1 {
+  #restaurants-list li h2 {
     font-size: 1.2em;
   }
   #restaurants-list p {
@@ -438,7 +439,7 @@ nav h1 a {
   #restaurants-list .restaurant-img {
     min-height: 200px;
   }
-  #restaurants-list li h1 {
+  #restaurants-list li h2 {
     font-size: 1.2em;
   }
   #restaurants-list p {
@@ -457,7 +458,7 @@ nav h1 a {
   #restaurants-list .restaurant-img {
     min-height: 200px;
   }
-  #restaurants-list li h1 {
+  #restaurants-list li h2 {
     font-size: 1.2em;
   }
   #restaurants-list p {
@@ -476,7 +477,7 @@ nav h1 a {
 
 @media screen and (max-width: 380px) {
   #restaurant-name {
-    font-size: 1.3em;
+    font-size: 1.5em;
   }
   #restaurant-cuisine,
   #restaurant-address {
@@ -485,8 +486,8 @@ nav h1 a {
   #restaurant-hours tr td {
     font-size: 0.8em;
   }
-  #reviews-container h2 {
-    font-size: 1.5em;
+  #reviews-container h3 {
+    font-size: 1.3em;
   }
   #reviews-list li p {
     font-size: 1.3em;
