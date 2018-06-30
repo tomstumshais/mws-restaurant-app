@@ -8,11 +8,147 @@
   <!-- Chrome, Firefox OS and Opera -->
   <meta name="theme-color" content="#a66900">
   <link rel="manifest" href="/manifest.json">
-  <!-- Normalize.css for better cross-browser consistency -->
-  <link rel="stylesheet" src="//normalize-css.googlecode.com/svn/trunk/normalize.css" />
-  <!-- Main CSS file -->
-  <link rel="stylesheet" href="css/styles.css">
   <title>Restaurant Info</title>
+
+  <style>
+    /* Necessary styles for first meaningful paint */
+
+    body {
+      background-color: #fdfdfd;
+      margin: 0;
+      position: relative;
+    }
+
+    body,
+    td,
+    th,
+    p {
+      font-family: Arial, Helvetica, sans-serif;
+      font-size: 18px;
+      color: #333;
+      line-height: 1.5;
+    }
+
+    a {
+      color: orange;
+      text-decoration: none;
+    }
+
+    #maincontent {
+      background-color: #f3f3f3;
+      min-height: 100%;
+      min-width: 100%;
+    }
+
+    #footer {
+      background-color: #444;
+      color: #dbdbdb;
+      font-size: 0.7em;
+      letter-spacing: 1px;
+      padding: 25px;
+      text-align: center;
+      text-transform: uppercase;
+    }
+
+    /* Skip link styling */
+
+    .skip-link {
+      position: absolute;
+      top: -100px;
+      left: 0;
+      background-color: #bf1722;
+      color: #fff;
+      padding: 10px;
+      z-index: 100;
+    }
+
+    /* ====================== Navigation ====================== */
+
+    nav {
+      width: 100%;
+      height: 80px;
+      background-color: #252831;
+      text-align: center;
+      line-height: 80px;
+    }
+
+    nav h1 {
+      margin: auto;
+    }
+
+    nav h1 a {
+      color: #fff;
+      font-size: 1.2em;
+      font-weight: 200;
+      letter-spacing: 10px;
+      text-transform: uppercase;
+    }
+
+    #breadcrumb {
+      padding: 10px 40px 16px;
+      list-style: none;
+      background-color: #eee;
+      font-size: 1.2em;
+      margin: 0;
+      width: calc(50% - 80px);
+    }
+
+    /* ====================== Map ====================== */
+
+    #map {
+      height: 400px;
+      width: 100%;
+      background-color: #ccc;
+    }
+
+    /* ====================== Restaurant Filtering ====================== */
+
+    .filter-options {
+      width: 100%;
+      height: 80px;
+      background-color: #007dbb;
+      align-items: center;
+    }
+
+    .filter-options h2 {
+      color: white;
+      font-size: 1rem;
+      font-weight: normal;
+      line-height: 1;
+      margin: 0 20px;
+      padding-top: 5px;
+    }
+
+    .filter-options div {
+      display: flex;
+    }
+
+    .filter-options select {
+      background-color: white;
+      border: 1px solid #fff;
+      font-family: Arial, sans-serif;
+      font-size: 1em;
+      height: 35px;
+      letter-spacing: 0;
+      margin: 10px;
+      padding: 0 10px;
+      max-width: 200px;
+      width: calc((100% - 40px) / 2);
+    }
+
+    /* ====================== Restaurant Listing ====================== */
+
+    #restaurants-list {
+      background-color: #f3f3f3;
+      list-style: outside none none;
+      margin: 0;
+      padding: 30px 15px 60px;
+      text-align: center;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+  </style>
 </head>
 
 <body class="inside">
@@ -68,6 +204,32 @@
     </a> All Rights Reserved.
   </footer>
   <!-- End footer -->
+
+  <!-- Deffer stylesheets loading -->
+  <noscript id="deferred-styles">
+    <!-- Normalize.css for better cross-browser consistency -->
+    <link rel="stylesheet" type="text/css" src="//normalize-css.googlecode.com/svn/trunk/normalize.css" />
+    <!-- Main CSS file -->
+    <link rel="stylesheet" type="text/css" href="css/styles.css">
+  </noscript>
+  <script>
+    const loadDeferredStyles = function () {
+      const addStylesNode = document.getElementById("deferred-styles");
+      const replacement = document.createElement("div");
+      replacement.innerHTML = addStylesNode.textContent;
+      document.body.appendChild(replacement)
+      addStylesNode.parentElement.removeChild(addStylesNode);
+    };
+    const raf = window.requestAnimationFrame || window.mozRequestAnimationFrame ||
+      window.webkitRequestAnimationFrame || window.msRequestAnimationFrame;
+    if (raf) {
+      raf(function () {
+        window.setTimeout(loadDeferredStyles, 0);
+      });
+    } else {
+      window.addEventListener('load', loadDeferredStyles);
+    }
+  </script>
 
   <!-- Beginning scripts -->
   <!-- IndexedDB promise library -->
