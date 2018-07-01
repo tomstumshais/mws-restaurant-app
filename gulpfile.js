@@ -1,4 +1,30 @@
 var gulp = require('gulp');
+var concat = require('gulp-concat');
+var uglify = require('gulp-uglify');
+var minify = require('gulp-minify-css');
+
+gulp.task('js', function () {
+  gulp.src('js/*.js')
+    .pipe(concat('bundle.js'))
+    .pipe(uglify())
+    .pipe(gulp.dest('build/js/'));
+});
+
+gulp.task('css', function () {
+  gulp.src('css/*.css')
+    .pipe(concat('styles.css'))
+    .pipe(minify())
+    .pipe(gulp.dest('build/css/'));
+});
+
+gulp.task('default', ['js', 'css'], function () {});
+
+// TODO: useful resources about Gulp
+// https://www.tutorialspoint.com/gulp/gulp_developing_application.htm
+// https://css-tricks.com/gulp-for-beginners/
+// https://www.youtube.com/watch?v=1rw9MfIleEg
+
+/*var gulp = require('gulp');
 var uglify = require('gulp-uglify');
 var browserSync = require('browser-sync').create();
 
@@ -36,4 +62,4 @@ gulp.task('default', ['html', 'css', 'js', 'data', 'copy-images', 'pwa'], functi
 
   gulp.watch('/index.html', ['html']);
   gulp.watch('*.html').on('change', browserSync.reload);
-});
+});*/
