@@ -197,7 +197,7 @@
       <form class="review-form" name="review-form" aria-labelledby="add-review">
         <div class="input__review-name">
           <p id="review-name">Name:</p>
-          <input type="text" aria-labelledby="review-name" aria-required="true">
+          <input type="text" name="review-name" aria-labelledby="review-name" aria-required="true">
         </div>
         <div class="input__review-rating">
           <p id="review-rating">Rating:</p>
@@ -214,7 +214,7 @@
           <p id="review-comment">Comment:</p>
           <textarea name="review-comment" aria-labelledby="review-comment" cols="30" rows="5" aria-required="true"></textarea>
         </div>
-        <button type="submit" class="review-form__button">Add Review</button>
+        <button type="button" class="review-form__button" onclick="addReview()">Add Review</button>
       </form>
     </section>
     <!-- End reviews -->

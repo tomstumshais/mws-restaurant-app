@@ -8,7 +8,7 @@ class DBHelper {
    */
   static get DATABASE_URL() {
     const port = 1337; // your server port
-    return `http://localhost:${port}/restaurants`;
+    return `http://localhost:${port}`;
   }
 
   /**
@@ -40,7 +40,7 @@ class DBHelper {
    * Fetch all restaurants with service.
    */
   static fetchRestaurants() {
-    return fetch(DBHelper.DATABASE_URL).then(response => {
+    return fetch(DBHelper.DATABASE_URL + '/restaurants').then(response => {
       if (response.ok) {
         return response.json().then(data => {
           // update IdexedDB with latest service data
@@ -213,5 +213,21 @@ class DBHelper {
       animation: google.maps.Animation.DROP
     });
     return marker;
+  }
+
+  static addReviewToServer(review) {
+    return fetch(DBHelper.DATABASE_URL + '/reviews', {
+      method: 'POST',
+      body: JSON.stringify(review)
+    }).then(response => {
+      if (response.ok) {
+        return response.json().then(data => {
+          // update IdexedDB with latest service data
+          // DBHelper.saveRestaurantsToDatabase(data);
+          return data;
+        });
+      }
+      return Promise.reject(new Error(`Request failed. Returned status of ${response.status}`));
+    });
   }
 }

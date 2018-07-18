@@ -188,3 +188,14 @@ getParameterByName = (name, url) => {
 
   return decodeURIComponent(results[2].replace(/\+/g, ' '));
 }
+
+addReview = () => {
+  const review = {
+    restaurant_id: self.restaurant.id,
+    name: document.querySelector('input[name="review-name"]').value,
+    rating: document.querySelector('select[name="review-rating"]').value,
+    comments: document.querySelector('textarea[name="review-comment"]').value
+  };
+  console.log(review);
+  DBHelper.addReviewToServer(review);
+}
