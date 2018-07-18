@@ -138,7 +138,7 @@ nav h1 a {
 #breadcrumb li+li:before {
   padding: 8px;
   color: black;
-  content: "/\00a0";
+  content: '/\00a0';
 }
 
 /* Add a color to all links inside the list */
@@ -218,7 +218,7 @@ nav h1 a {
   margin: 15px;
   min-height: 380px;
   padding: 0 30px 25px;
-  text-align: left;
+  /* text-align: left; */
   min-width: 240px;
   max-width: 270px;
 }
@@ -247,7 +247,8 @@ nav h1 a {
   font-size: 1.1em;
 }
 
-#restaurants-list li a {
+#restaurants-list li a,
+.review-form__button {
   background-color: #a66900;
   border-bottom: 3px solid #eee;
   color: #fff;
@@ -381,6 +382,50 @@ nav h1 a {
   color: #666;
 }
 
+/* ====================== Restaurant Review Form ====================== */
+
+.review-form {
+  width: 100%;
+  margin-bottom: 20px;
+}
+
+.input__review-name,
+.input__review-rating {
+  display: inline-flex;
+  margin-bottom: 10px;
+}
+
+.input__review-name p,
+.input__review-rating p {
+  margin: 0;
+  width: 70px;
+}
+
+.input__review-name input {
+  width: 100%;
+  max-width: 150px;
+}
+
+.input__review-rating select {
+  width: 50px;
+}
+
+.input__review-comment p {
+  margin: 0;
+}
+
+.input__review-comment,
+.input__review-comment textarea {
+  width: 100%;
+  max-width: 400px;
+}
+
+.review-form__button {
+  max-width: 300px;
+  width: 100%;
+  font-size: 0.75em;
+}
+
 /* ====================== Responsive Design ====================== */
 
 /* For Main Restaurant page */
@@ -491,6 +536,9 @@ nav h1 a {
   }
   #reviews-list li p {
     font-size: 1.3em;
+  }
+  .review-form p {
+    font-size: 0.9em;
   }
 }
 

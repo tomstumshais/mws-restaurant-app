@@ -191,6 +191,31 @@
     <!-- Beginning reviews -->
     <section id="reviews-container">
       <ul id="reviews-list" aria-label="List of restaurants reviews"></ul>
+
+      <!-- Add Review form -->
+      <h3 id="add-review">Add Review</h3>
+      <form class="review-form" name="review-form" role="form" aria-labelledby="add-review">
+        <div class="input__review-name">
+          <p id="review-name">Name:</p>
+          <input type="text" aria-labelledby="review-name" aria-required="true">
+        </div>
+        <div class="input__review-rating">
+          <p id="review-rating">Rating:</p>
+          <select name="review-rating" aria-labelledby="review-rating" aria-required="true">
+            <option value="0">0</option>
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+            <option value="5">5</option>
+          </select>
+        </div>
+        <div class="input__review-comment">
+          <p id="review-comment">Comment:</p>
+          <textarea name="review-comment" aria-labelledby="review-comment" cols="30" rows="5" aria-required="true"></textarea>
+        </div>
+        <button type="submit" class="review-form__button">Add Review</button>
+      </form>
     </section>
     <!-- End reviews -->
   </main>
