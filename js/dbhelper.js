@@ -107,25 +107,6 @@ class DBHelper {
   }
 
   /**
-   * Save Restaurants to IndexedDB.
-   * @param {Object} review Review's object
-   */
-  static saveOfflineReviewToDatabase(review) {
-    this._dbPromise
-      .then(db => {
-        const tx = db.transaction('offline-reviews', 'readwrite');
-        const store = tx.objectStore('offline-reviews');
-        // add Offline Reviews to IndexedD
-        store.put(review);
-        return tx.complete;
-      })
-      .then(() => {
-        console.log('Offline Review added to IndexedDB!');
-      })
-      .catch(error => console.error('Error while adding Offline Review to DB', error));
-  }
-
-  /**
    * Fetch a restaurant by its ID.
    */
   static fetchRestaurantById(id) {
@@ -241,11 +222,11 @@ class DBHelper {
     return marker;
   }
 
-  static addReviewToServer(review) {
-    return fetch(DBHelper.DATABASE_URL + '/reviews', {
-      method: 'POST',
-      body: JSON.stringify(review)
-    }).then(response => {
+  /**
+   * Get Restaurant Reviews from service.
+   */
+  static getRestaurantReviews(restaurantId) {
+    return fetch(DBHelper.DATABASE_URL + '/reviews/?restaurant_id=' + restaurantId).then(response => {
       if (response.ok) {
         return response.json().then(data => {
           // update IdexedDB with latest service data
@@ -258,10 +239,34 @@ class DBHelper {
   }
 
   /**
-   * Fetch Restaurant Reviews with service.
+   * Save Offline Review to IndexedDB. When user is in offline mode,
+   * then temporary store reviews in IndexedDB till user get back online.
+   * @param {Object} review Review's object
    */
-  static getRestaurantReviews(restaurantId) {
-    return fetch(DBHelper.DATABASE_URL + '/reviews/?restaurant_id=' + restaurantId).then(response => {
+  static saveOfflineReviewToDatabase(review) {
+    this._dbPromise
+      .then(db => {
+        const tx = db.transaction('offline-reviews', 'readwrite');
+        const store = tx.objectStore('offline-reviews');
+        // add Offline Reviews to IndexedDB
+        store.put(review);
+        return tx.complete;
+      })
+      .then(() => {
+        console.log('Offline Review added to IndexedDB!');
+      })
+      .catch(error => console.error('Error while adding Offline Review to DB', error));
+  }
+
+  /**
+   * Save Review to back-end.
+   * @param {Object} review Review's object
+   */
+  static addReviewToServer(review) {
+    return fetch(DBHelper.DATABASE_URL + '/reviews', {
+      method: 'POST',
+      body: JSON.stringify(review)
+    }).then(response => {
       if (response.ok) {
         return response.json().then(data => {
           // update IdexedDB with latest service data
