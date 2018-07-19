@@ -230,4 +230,20 @@ class DBHelper {
       return Promise.reject(new Error(`Request failed. Returned status of ${response.status}`));
     });
   }
+
+  /**
+   * Fetch Restaurant Reviews with service.
+   */
+  static getRestaurantReviews(restaurantId) {
+    return fetch(DBHelper.DATABASE_URL + '/reviews/?restaurant_id=' + restaurantId).then(response => {
+      if (response.ok) {
+        return response.json().then(data => {
+          // update IdexedDB with latest service data
+          // DBHelper.saveRestaurantsToDatabase(data);
+          return data;
+        });
+      }
+      return Promise.reject(new Error(`Request failed. Returned status of ${response.status}`));
+    });
+  }
 }

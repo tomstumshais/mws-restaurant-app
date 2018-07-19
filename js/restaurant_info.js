@@ -83,8 +83,8 @@ fillRestaurantHTML = (restaurant = self.restaurant) => {
   if (restaurant.operating_hours) {
     fillRestaurantHoursHTML();
   }
-  // fill reviews
-  fillReviewsHTML();
+  // fetch and fill UI with reviews
+  fetchRestaurantReviews();
 }
 
 /**
@@ -108,21 +108,34 @@ fillRestaurantHoursHTML = (operatingHours = self.restaurant.operating_hours) => 
 }
 
 /**
+ * Fetch Restaurant Reviews from back-end
+ */
+fetchRestaurantReviews = () => {
+  DBHelper.getRestaurantReviews(self.restaurant.id)
+    .then((reviews) => {
+      this.fillReviewsHTML(reviews);
+    }, (error) => {
+      console.error('Restaurant Reviews service is down: ' + error);
+    });
+}
+
+/**
  * Create all reviews HTML and add them to the webpage.
  */
-fillReviewsHTML = (reviews = self.restaurant.reviews) => {
+fillReviewsHTML = (reviews = []) => {
   const container = document.getElementById('reviews-container');
   const title = document.createElement('h3');
   title.innerHTML = 'Reviews';
   container.appendChild(title);
 
-  if (!reviews) {
+  if (!reviews.length) {
     const noReviews = document.createElement('p');
     noReviews.innerHTML = 'No reviews yet!';
     container.appendChild(noReviews);
     return;
   }
 
+  // add Reviews to UI
   const ul = document.getElementById('reviews-list');
   reviews.forEach(review => {
     ul.appendChild(createReviewHTML(review));
@@ -144,6 +157,7 @@ createReviewHTML = (review) => {
   li.appendChild(name);
 
   const date = document.createElement('p');
+  this.setFormattedDateForReview(review);
   date.setAttribute('aria-label', `Date of review is ${review.date}`);
   date.innerHTML = review.date;
   date.classList.add('reviews-list__date');
@@ -160,6 +174,18 @@ createReviewHTML = (review) => {
   li.appendChild(comments);
 
   return li;
+}
+
+/**
+ * Format Review's date to show properly in UI
+ */
+setFormattedDateForReview = (review) => {
+  const reviewDate = new Date(review.createdAt);
+  const date = ('0' + reviewDate.getDate()).slice(-2);
+  const month = ('0' + (reviewDate.getMonth() + 1)).slice(-2);
+  const year = reviewDate.getFullYear();
+
+  review.date = `${date}/${month}/${year}`;
 }
 
 /**
@@ -189,6 +215,9 @@ getParameterByName = (name, url) => {
   return decodeURIComponent(results[2].replace(/\+/g, ' '));
 }
 
+/**
+ * Take entered user data from 'Add Review' form and add new Review to back-end
+ */
 addReview = () => {
   const review = {
     restaurant_id: self.restaurant.id,
@@ -196,6 +225,40 @@ addReview = () => {
     rating: document.querySelector('select[name="review-rating"]').value,
     comments: document.querySelector('textarea[name="review-comment"]').value
   };
-  console.log(review);
-  DBHelper.addReviewToServer(review);
+  // call request to save review
+  DBHelper.addReviewToServer(review)
+    .then((reviewObject) => {
+      if (reviewObject) {
+        this.addReviewToUI(reviewObject);
+      }
+      this.clearReviewForm();
+    }, (error) => {
+      console.error('Review creation service down: ' + error);
+    });
+}
+
+/**
+ * Clear Add Review's form.
+ */
+clearReviewForm = () => {
+  document.querySelector('input[name="review-name"]').value = '';
+  document.querySelector('select[name="review-rating"]').value = 0;
+  document.querySelector('textarea[name="review-comment"]').value = '';
+}
+
+/**
+ * Add new Reviews to UI by one. Previously check if some review is added yet,
+ * if not, then remove 'no data' text and remove first one.
+ */
+addReviewToUI = (review) => {
+  const container = document.getElementById('reviews-container');
+  const ul = document.getElementById('reviews-list');
+  // check if some reviews are added yet, if not, then remove 'No data' text
+  if (ul.getElementsByTagName('li').length) {
+    ul.appendChild(createReviewHTML(review));
+  } else {
+    container.removeChild(container.lastChild);
+    ul.appendChild(createReviewHTML(review));
+    container.appendChild(ul);
+  }
 }

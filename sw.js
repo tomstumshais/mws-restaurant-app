@@ -107,10 +107,17 @@ function servePhoto(request) {
  * @param {String} cacheStorageName Cache storage name
  */
 function fetchAndCache(request, cacheStorageName) {
-  return caches.open(cacheStorageName).then(function (cache) {
-    return fetch(request).then(function (networkResponse) {
-      cache.put(request, networkResponse.clone());
+  if (request.method === 'GET') {
+    return caches.open(cacheStorageName).then((cache) => {
+      return fetch(request).then((networkResponse) => {
+        cache.put(request, networkResponse.clone());
+        return networkResponse;
+      });
+    });
+  } else {
+    // for POST requests
+    return fetch(request).then((networkResponse) => {
       return networkResponse;
     });
-  });
+  }
 }
