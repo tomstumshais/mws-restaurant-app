@@ -57,8 +57,15 @@ class DBHelper {
    */
   static openDatabase() {
     return idb.open('restaurant-review', 1, upgradeDB => {
-      const store = upgradeDB.createObjectStore('restaurants', {
+      // create all needed object stores for application
+      upgradeDB.createObjectStore('restaurants', {
         keyPath: 'id'
+      });
+      upgradeDB.createObjectStore('reviews', {
+        keyPath: 'restaurant_id'
+      });
+      upgradeDB.createObjectStore('offline-reviews', {
+        keyPath: 'restaurant_id'
       });
     });
   }
@@ -97,6 +104,25 @@ class DBHelper {
         return restaurants;
       });
     });
+  }
+
+  /**
+   * Save Restaurants to IndexedDB.
+   * @param {Object} review Review's object
+   */
+  static saveOfflineReviewToDatabase(review) {
+    this._dbPromise
+      .then(db => {
+        const tx = db.transaction('offline-reviews', 'readwrite');
+        const store = tx.objectStore('offline-reviews');
+        // add Offline Reviews to IndexedD
+        store.put(review);
+        return tx.complete;
+      })
+      .then(() => {
+        console.log('Offline Review added to IndexedDB!');
+      })
+      .catch(error => console.error('Error while adding Offline Review to DB', error));
   }
 
   /**

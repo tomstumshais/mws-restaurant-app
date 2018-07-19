@@ -637,6 +637,15 @@
         "createdAt": "2018-07-19T10:25:00.664Z",
         "updatedAt": "2018-07-19T10:25:00.664Z",
         "id": 44
+      },
+      {
+        "restaurant_id": 3,
+        "name": "Toms",
+        "rating": "4",
+        "comments": "Very nice!",
+        "createdAt": "2018-07-19T10:29:17.650Z",
+        "updatedAt": "2018-07-19T10:29:17.650Z",
+        "id": 45
       }
     ]
   },
@@ -692,7 +701,7 @@
       "id": 11
     },
     "reviews": {
-      "id": 44
+      "id": 45
     }
   }
 }

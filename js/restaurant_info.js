@@ -225,16 +225,29 @@ addReview = () => {
     rating: document.querySelector('select[name="review-rating"]').value,
     comments: document.querySelector('textarea[name="review-comment"]').value
   };
-  // call request to save review
-  DBHelper.addReviewToServer(review)
-    .then((reviewObject) => {
-      if (reviewObject) {
-        this.addReviewToUI(reviewObject);
-      }
-      this.clearReviewForm();
-    }, (error) => {
-      console.error('Review creation service down: ' + error);
-    });
+
+  if (navigator.onLine) {
+    // user is online, call request to save review
+    DBHelper.addReviewToServer(review)
+      .then((reviewObject) => {
+        if (reviewObject) {
+          this.addReviewToUI(reviewObject);
+        }
+        this.clearReviewForm();
+      }, (error) => {
+        console.error('Review creation service down: ' + error);
+      });
+  } else {
+    // user is offline, store data localy
+    this.storeReviewData(review);
+  }
+}
+
+/**
+ * Store Review data in IndexedDB while user is offline.
+ */
+storeReviewData = (review) => {
+
 }
 
 /**
