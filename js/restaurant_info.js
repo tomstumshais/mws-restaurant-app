@@ -108,6 +108,33 @@ fillRestaurantHoursHTML = (operatingHours = self.restaurant.operating_hours) => 
 }
 
 /**
+ * Add restaurant name to the breadcrumb navigation menu
+ */
+fillBreadcrumb = (restaurant = self.restaurant) => {
+  const breadcrumb = document.getElementById('breadcrumb');
+  const li = document.createElement('li');
+  li.innerHTML = restaurant.name;
+  breadcrumb.appendChild(li);
+}
+
+/**
+ * Get a parameter by name from page URL.
+ */
+getParameterByName = (name, url) => {
+  if (!url) {
+    url = window.location.href;
+  }
+
+  name = name.replace(/[\[\]]/g, '\\$&');
+  const regex = new RegExp(`[?&]${name}(=([^&#]*)|&|#|$)`);
+  const results = regex.exec(url);
+  if (!results) return null;
+  if (!results[2]) return '';
+
+  return decodeURIComponent(results[2].replace(/\+/g, ' '));
+}
+
+/**
  * Fetch Restaurant Reviews from back-end
  */
 fetchRestaurantReviews = () => {
@@ -189,33 +216,6 @@ setFormattedDateForReview = (review) => {
 }
 
 /**
- * Add restaurant name to the breadcrumb navigation menu
- */
-fillBreadcrumb = (restaurant = self.restaurant) => {
-  const breadcrumb = document.getElementById('breadcrumb');
-  const li = document.createElement('li');
-  li.innerHTML = restaurant.name;
-  breadcrumb.appendChild(li);
-}
-
-/**
- * Get a parameter by name from page URL.
- */
-getParameterByName = (name, url) => {
-  if (!url) {
-    url = window.location.href;
-  }
-
-  name = name.replace(/[\[\]]/g, '\\$&');
-  const regex = new RegExp(`[?&]${name}(=([^&#]*)|&|#|$)`);
-  const results = regex.exec(url);
-  if (!results) return null;
-  if (!results[2]) return '';
-
-  return decodeURIComponent(results[2].replace(/\+/g, ' '));
-}
-
-/**
  * Take entered user data from 'Add Review' form and add new Review to back-end
  */
 addReview = () => {
@@ -223,20 +223,13 @@ addReview = () => {
     restaurant_id: self.restaurant.id,
     name: document.querySelector('input[name="review-name"]').value,
     rating: document.querySelector('select[name="review-rating"]').value,
-    comments: document.querySelector('textarea[name="review-comment"]').value
+    comments: document.querySelector('textarea[name="review-comment"]').value,
+    createdAt: (new Date()).getTime()
   };
 
   if (navigator.onLine) {
     // user is online, call request to save review
-    DBHelper.addReviewToServer(review)
-      .then((reviewObject) => {
-        if (reviewObject) {
-          this.addReviewToUI(reviewObject);
-        }
-        this.clearReviewForm();
-      }, (error) => {
-        console.error('Review creation service down: ' + error);
-      });
+    this.sendReviewData(review);
   } else {
     // user is offline, store data localy
     this.storeReviewData(review);
@@ -244,10 +237,29 @@ addReview = () => {
 }
 
 /**
- * Store Review data in IndexedDB while user is offline.
+ * Send Review data to back-end.
+ */
+sendReviewData = (review) => {
+  DBHelper.addReviewToServer(review)
+    .then((reviewObject) => {
+      if (reviewObject) {
+        this.addReviewToUI(reviewObject);
+      }
+      this.clearReviewForm();
+    })
+    .catch((error) => {
+      console.error('Review creation service down: ' + error);
+    });
+}
+
+/**
+ * Store Review data in IndexedDB.
  */
 storeReviewData = (review) => {
-
+  DBHelper.saveOfflineReviewLocally(review);
+  this.addReviewToUI(review);
+  this.clearReviewForm(review);
+  console.log('Review added to IndexedDB!');
 }
 
 /**
@@ -275,3 +287,30 @@ addReviewToUI = (review) => {
     container.appendChild(ul);
   }
 }
+
+checkOfflineReviewsStorage = () => {
+  const key = 'offline-reviews';
+  const reviewsString = localStorage.getItem(key);
+  if (reviewsString) {
+    const promiseArray = [];
+    const reviewsJSON = JSON.parse(reviewsString);
+    // create array with request promises
+    reviewsJSON.forEach((review, index) => {
+      const requestPromise = DBHelper.addReviewToServer(review);
+      promiseArray.push(requestPromise);
+    });
+
+    // wait when all reviews are sent, then remove reviews from storage
+    Promise.all(promiseArray)
+      .then(() => {
+        localStorage.removeItem(key);
+        console.log('All reviews sent!');
+      });
+  }
+}
+
+/**
+ * Check offline Reviews storage to update back-end with offline data.
+ */
+window.addEventListener('online', this.checkOfflineReviewsStorage);
+window.addEventListener('load', this.checkOfflineReviewsStorage);

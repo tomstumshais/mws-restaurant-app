@@ -64,9 +64,6 @@ class DBHelper {
       upgradeDB.createObjectStore('reviews', {
         keyPath: 'restaurant_id'
       });
-      upgradeDB.createObjectStore('offline-reviews', {
-        keyPath: 'restaurant_id'
-      });
     });
   }
 
@@ -222,15 +219,41 @@ class DBHelper {
     return marker;
   }
 
+  // ******************** REVIEWS ******************** //
+  /**
+   * Get Reviews data from IndexedDB or service.
+   */
+  static getRestaurantReviews(restaurantId) {
+    if (!this._dbPromise) {
+      this._dbPromise = DBHelper.openDatabase();
+    }
+
+    // How to get Reviews data:
+    // 1. if not exists, call service request and return data
+    // 2. if exists, return data from database
+    // 3. then in the background call service request and update data in database
+    return DBHelper.getReviewsFromDatabase(restaurantId).then(data => {
+      // if database is empty then call service to get Restaurants data
+      if (!data || !data.reviews || !data.reviews.length) {
+        return DBHelper.fetchRestaurantReviews(restaurantId);
+      } else {
+        // fetch Reviews service to update database
+        DBHelper.fetchRestaurantReviews(restaurantId);
+        // return already retrieved data from database
+        return data.reviews;
+      }
+    });
+  }
+
   /**
    * Get Restaurant Reviews from service.
    */
-  static getRestaurantReviews(restaurantId) {
+  static fetchRestaurantReviews(restaurantId) {
     return fetch(DBHelper.DATABASE_URL + '/reviews/?restaurant_id=' + restaurantId).then(response => {
       if (response.ok) {
         return response.json().then(data => {
           // update IdexedDB with latest service data
-          // DBHelper.saveRestaurantsToDatabase(data);
+          DBHelper.saveReviewsToDatabase(restaurantId, data);
           return data;
         });
       }
@@ -239,23 +262,71 @@ class DBHelper {
   }
 
   /**
-   * Save Offline Review to IndexedDB. When user is in offline mode,
-   * then temporary store reviews in IndexedDB till user get back online.
-   * @param {Object} review Review's object
+   * Save Reviews to IndexedDB.
+   * @param {Array} reviews Array with Reviews
    */
-  static saveOfflineReviewToDatabase(review) {
+  static saveReviewsToDatabase(restaurantId, reviews) {
     this._dbPromise
       .then(db => {
-        const tx = db.transaction('offline-reviews', 'readwrite');
-        const store = tx.objectStore('offline-reviews');
-        // add Offline Reviews to IndexedDB
-        store.put(review);
+        const tx = db.transaction('reviews', 'readwrite');
+        const store = tx.objectStore('reviews');
+        // add reviews by Restaurant ID to IndexedDB
+        store.put({
+          restaurant_id: restaurantId,
+          reviews: reviews
+        });
+
         return tx.complete;
       })
       .then(() => {
-        console.log('Offline Review added to IndexedDB!');
+        console.log('Reviews added to IndexedDB!');
       })
-      .catch(error => console.error('Error while adding Offline Review to DB', error));
+      .catch(error => console.error('Error while adding Reviews to DB', error));
+  }
+
+  /**
+   * Get saved Reviews from IndexedDB.
+   */
+  static getReviewsFromDatabase(restaurantId) {
+    return this._dbPromise.then(function (db) {
+      if (!db) return false;
+
+      const store = db.transaction('reviews').objectStore('reviews');
+
+      return store.get(restaurantId).then(function (reviews) {
+        return reviews;
+      });
+    });
+  }
+
+  /**
+   * Save Offline Review to LocalStorage. When user is in offline mode,
+   * then temporary store reviews in LocalStorage till user get back online.
+   * @param {Object} review Review's object
+   */
+  static saveOfflineReviewLocally(review) {
+    // TODO: better solution there should be to use localForage library which is async
+    const key = 'offline-reviews';
+    // check if exists any items
+    const offlineReviews = localStorage.getItem(key);
+    if (offlineReviews) {
+      try {
+        const reviewsJSON = JSON.parse(offlineReviews);
+        reviewsJSON.push(review);
+        const reviewsString = JSON.stringify(reviewsJSON);
+        localStorage.setItem(key, reviewsString);
+      } catch (error) {
+        console.error('Error while parsing JSON: ', error);
+      }
+    } else {
+      const reviewsJSON = [review];
+      const reviewsString = JSON.stringify(reviewsJSON);
+      localStorage.setItem(key, reviewsString);
+    }
+  }
+
+  static saveOfflineReviewToDataBase(review) {
+    // TODO: implement logic how to add only one review for restaurant into database
   }
 
   /**
