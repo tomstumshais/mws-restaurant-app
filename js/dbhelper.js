@@ -222,7 +222,7 @@ class DBHelper {
   // ******************** REVIEWS ******************** //
   /**
    * Get Reviews data from IndexedDB or service.
-   * @param {String} restaurantId Restaurant's ID
+   * @param {Number} restaurantId Restaurant's ID
    */
   static getRestaurantReviews(restaurantId) {
     if (!this._dbPromise) {
@@ -249,7 +249,7 @@ class DBHelper {
 
   /**
    * Get Restaurant Reviews from service.
-   * @param {String} restaurantId Restaurant's ID
+   * @param {Number} restaurantId Restaurant's ID
    */
   static fetchRestaurantReviews(restaurantId) {
     return fetch(DBHelper.DATABASE_URL + '/reviews/?restaurant_id=' + restaurantId).then(response => {
@@ -289,7 +289,7 @@ class DBHelper {
 
   /**
    * Get saved Reviews from IndexedDB.
-   * @param {String} restaurantId Restaurant's ID
+   * @param {Number} restaurantId Restaurant's ID
    */
   static getReviewsFromDatabase(restaurantId) {
     return this._dbPromise.then(function (db) {
@@ -373,10 +373,38 @@ class DBHelper {
       body: JSON.stringify(review)
     }).then(response => {
       if (response.ok) {
+        return response.json().then(data => data);
+      }
+      return Promise.reject(new Error(`Request failed. Returned status of ${response.status}`));
+    });
+  }
+
+  // ******************** FAVORITES ******************** //
+  /**
+   * Update Restaurant's favorite state.
+   * @param {Number} restaurantId Restaurant's number
+   * @param {Boolean} isFavorite Restaurant's favorite state
+   */
+  static setRestaurantFavoriteState(restaurantId, isFavorite) {
+    /*
+    ### PUT Endpoints
+
+#### Favorite a restaurant
+```
+http://localhost:1337/restaurants/<restaurant_id>/?is_favorite=true
+```
+
+#### Unfavorite a restaurant
+```
+http://localhost:1337/restaurants/<restaurant_id>/?is_favorite=false
+    */
+
+    return fetch(DBHelper.DATABASE_URL + '/restaurants/' + restaurantId + '/?is_favorite=' + isFavorite, {
+      method: 'PUT'
+    }).then(response => {
+      if (response.ok) {
         return response.json().then(data => {
-          // update IdexedDB with latest service data
-          // DBHelper.saveRestaurantsToDatabase(data);
-          return data;
+          console.log(data);
         });
       }
       return Promise.reject(new Error(`Request failed. Returned status of ${response.status}`));

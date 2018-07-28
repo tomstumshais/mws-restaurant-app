@@ -79,6 +79,8 @@ fillRestaurantHTML = (restaurant = self.restaurant) => {
   cuisine.setAttribute('aria-label', `Restaurant's cuisine is ${restaurant.cuisine_type}`);
   cuisine.innerHTML = restaurant.cuisine_type;
 
+  this.toggleRestaurantFavoriteState(restaurant.is_favorite);
+
   // fill operating hours
   if (restaurant.operating_hours) {
     fillRestaurantHoursHTML();
@@ -306,6 +308,19 @@ checkOfflineReviewsStorage = () => {
         localStorage.removeItem(key);
         console.log('All reviews sent!');
       });
+  }
+}
+
+toggleRestaurantFavoriteState = (favoriteState) => {
+  const isFavorite = document.querySelector('.restaurant-favorite--is');
+  const notFavorite = document.querySelector('.restaurant-favorite--not');
+
+  if (favoriteState) {
+    isFavorite.classList.remove('hidden');
+    notFavorite.classList.add('hidden');
+  } else {
+    notFavorite.classList.remove('hidden');
+    isFavorite.classList.add('hidden');
   }
 }
 

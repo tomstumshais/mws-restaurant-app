@@ -248,7 +248,8 @@ nav h1 a {
 }
 
 #restaurants-list li a,
-.review-form__button {
+.review-form__button,
+.favorite-button {
   background-color: #a66900;
   border-bottom: 3px solid #eee;
   color: #fff;
@@ -424,6 +425,20 @@ nav h1 a {
   max-width: 300px;
   width: 100%;
   font-size: 0.75em;
+}
+
+/* ====================== Restaurant Review Form ====================== */
+
+.show {
+  display: block;
+}
+
+.hidden {
+  display: none;
+}
+
+.favorite-button {
+  padding: 8px 20px 10px;
 }
 
 /* ====================== Responsive Design ====================== */

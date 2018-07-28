@@ -184,6 +184,15 @@
       <h2 id="restaurant-name"></h2>
       <img id="restaurant-img">
       <p id="restaurant-cuisine"></p>
+      <!-- Restaurant's favorites block -->
+      <div class="restaurant-favorite--is hidden">
+        <p>!!! It's your favorite !!!</p>
+        <button class="favorite-button" onclick="toggleRestaurantFavoriteState(false)">X</button>
+      </div>
+      <div class="restaurant-favorite--not hidden">
+        <button class="favorite-button" onclick="toggleRestaurantFavoriteState(true)">Set as favorite</button>
+      </div>
+      <!-- End of Restaurant's favorites block -->
       <p id="restaurant-address"></p>
       <table id="restaurant-hours" aria-label="Table of restaurant working hours"></table>
     </section>
