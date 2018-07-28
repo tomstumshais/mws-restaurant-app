@@ -328,6 +328,9 @@ class DBHelper {
 
   static saveOfflineReviewToDataBase(review) {
     // TODO: implement logic how to add only one review for restaurant into database
+    // get restaurant reviews from database by restaurant's id
+    // push new review to this array
+    // put back this object with update reviews array
   }
 
   /**
