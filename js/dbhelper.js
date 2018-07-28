@@ -229,20 +229,21 @@ class DBHelper {
     }
 
     // How to get Reviews data:
-    // 1. if not exists, call service request and return data
-    // 2. if exists, return data from database
-    // 3. then in the background call service request and update data in database
-    return DBHelper.getReviewsFromDatabase(restaurantId).then(data => {
-      // if database is empty then call service to get Restaurants data
-      if (!data || !data.reviews || !data.reviews.length) {
-        return DBHelper.fetchRestaurantReviews(restaurantId);
-      } else {
-        // fetch Reviews service to update database
-        DBHelper.fetchRestaurantReviews(restaurantId);
-        // return already retrieved data from database
-        return data.reviews;
-      }
-    });
+    // 1. Fetch data from Reviews service
+    // 2. on success - save data to database and return those data to UI
+    // 3. on error - call data from database and look if there are some data
+    return DBHelper.fetchRestaurantReviews(restaurantId)
+      .then((data) => {
+        // data from service
+        return data;
+      }, (error) => {
+        console.error('Restaurant Reviews service failed!', error);
+        return DBHelper.getReviewsFromDatabase(restaurantId)
+          .then(data => {
+            // data from database
+            return data.reviews;
+          });
+      });
   }
 
   /**
