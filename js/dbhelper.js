@@ -222,6 +222,7 @@ class DBHelper {
   // ******************** REVIEWS ******************** //
   /**
    * Get Reviews data from IndexedDB or service.
+   * @param {String} restaurantId Restaurant's ID
    */
   static getRestaurantReviews(restaurantId) {
     if (!this._dbPromise) {
@@ -248,6 +249,7 @@ class DBHelper {
 
   /**
    * Get Restaurant Reviews from service.
+   * @param {String} restaurantId Restaurant's ID
    */
   static fetchRestaurantReviews(restaurantId) {
     return fetch(DBHelper.DATABASE_URL + '/reviews/?restaurant_id=' + restaurantId).then(response => {
@@ -287,6 +289,7 @@ class DBHelper {
 
   /**
    * Get saved Reviews from IndexedDB.
+   * @param {String} restaurantId Restaurant's ID
    */
   static getReviewsFromDatabase(restaurantId) {
     return this._dbPromise.then(function (db) {
@@ -316,6 +319,8 @@ class DBHelper {
         reviewsJSON.push(review);
         const reviewsString = JSON.stringify(reviewsJSON);
         localStorage.setItem(key, reviewsString);
+
+        DBHelper.saveOfflineReviewToDataBase(review);
       } catch (error) {
         console.error('Error while parsing JSON: ', error);
       }
@@ -323,14 +328,39 @@ class DBHelper {
       const reviewsJSON = [review];
       const reviewsString = JSON.stringify(reviewsJSON);
       localStorage.setItem(key, reviewsString);
+
+      DBHelper.saveOfflineReviewToDataBase(review);
     }
   }
 
+  /**
+   * Save to database only by one review.
+   * @param {Object} review Review's object
+   */
   static saveOfflineReviewToDataBase(review) {
-    // TODO: implement logic how to add only one review for restaurant into database
     // get restaurant reviews from database by restaurant's id
     // push new review to this array
     // put back this object with update reviews array
+
+    if (!review || !review.restaurant_id) return false;
+
+    DBHelper.getReviewsFromDatabase(review.restaurant_id)
+      .then((data) => {
+        if (data) {
+          // add review to reviews array which exists in database
+          data.reviews.push(review);
+        } else {
+          // create new object for database
+          data = {
+            restaurant_id: review.restaurant_id,
+            reviews: [review],
+          };
+        }
+
+        DBHelper.saveReviewsToDatabase(data.restaurant_id, data.reviews);
+      }, (error) => {
+        console.error('Failed to get Reviews from database!', error);
+      });
   }
 
   /**
