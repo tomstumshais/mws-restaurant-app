@@ -185,9 +185,11 @@
       <img id="restaurant-img">
       <p id="restaurant-cuisine"></p>
       <!-- Restaurant's favorites block -->
-      <div class="restaurant-favorite--is hidden">
-        <p>!!! It's your favorite !!!</p>
-        <button class="favorite-button" onclick="toggleRestaurantFavoriteState(false)">X</button>
+      <div class="restaurant-favorite-container--is hidden">
+        <div class="restaurant-favorite--is">
+          <p>!!! It's your favorite !!!</p>
+          <button class="favorite-button" onclick="toggleRestaurantFavoriteState(false)">X</button>
+        </div>
       </div>
       <div class="restaurant-favorite--not hidden">
         <button class="favorite-button" onclick="toggleRestaurantFavoriteState(true)">Set as favorite</button>

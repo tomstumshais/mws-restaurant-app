@@ -312,7 +312,7 @@ checkOfflineReviewsStorage = () => {
 }
 
 toggleRestaurantFavoriteState = (favoriteState) => {
-  const isFavorite = document.querySelector('.restaurant-favorite--is');
+  const isFavorite = document.querySelector('.restaurant-favorite-container--is');
   const notFavorite = document.querySelector('.restaurant-favorite--not');
 
   if (favoriteState) {

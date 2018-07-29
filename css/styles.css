@@ -438,7 +438,24 @@ nav h1 a {
 }
 
 .favorite-button {
-  padding: 8px 20px 10px;
+  margin: 0px;
+  width: auto;
+  height: 40px;
+  padding: 0 5px;
+  font-size: 0.75em;
+}
+
+.restaurant-favorite--is {
+  display: inline-flex;
+}
+
+.restaurant-favorite--is p {
+  margin: 0 10px 0 0;
+  line-height: 40px;
+}
+
+.restaurant-favorite--is button {
+  width: 40px;
 }
 
 /* ====================== Responsive Design ====================== */
