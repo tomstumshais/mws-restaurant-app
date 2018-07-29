@@ -79,7 +79,7 @@ fillRestaurantHTML = (restaurant = self.restaurant) => {
   cuisine.setAttribute('aria-label', `Restaurant's cuisine is ${restaurant.cuisine_type}`);
   cuisine.innerHTML = restaurant.cuisine_type;
 
-  this.toggleRestaurantFavoriteState(restaurant.is_favorite);
+  this.updateFavoriteUI(restaurant.is_favorite);
 
   // fill operating hours
   if (restaurant.operating_hours) {
@@ -290,7 +290,7 @@ addReviewToUI = (review) => {
   }
 }
 
-checkOfflineReviewsStorage = () => {
+checkOfflineStorage = () => {
   const key = 'offline-reviews';
   const reviewsString = localStorage.getItem(key);
   if (reviewsString) {
@@ -312,6 +312,18 @@ checkOfflineReviewsStorage = () => {
 }
 
 toggleRestaurantFavoriteState = (favoriteState) => {
+  //TODO:
+  // implement service call with database update & offline support
+  if (navigator.onLine) {
+    // user is online, call request to update favorite
+    this.updateFavoriteByService(self.restaurant.id, favoriteState);
+  } else {
+    // user is offline, store data localy
+    this.storeReviewData(review);
+  }
+}
+
+updateFavoriteUI = (favoriteState) => {
   const isFavorite = document.querySelector('.restaurant-favorite-container--is');
   const notFavorite = document.querySelector('.restaurant-favorite--not');
 
@@ -324,8 +336,19 @@ toggleRestaurantFavoriteState = (favoriteState) => {
   }
 }
 
+updateFavoriteByService = (restaurantId, isFavorite) => {
+  DBHelper.setRestaurantFavoriteState(restaurantId, isFavorite)
+    .then((response) => {
+      console.log(response);
+      this.updateFavoriteUI(isFavorite);
+    })
+    .catch((error) => {
+      console.error('Favorite update service down: ' + error);
+    });
+}
+
 /**
  * Check offline Reviews storage to update back-end with offline data.
  */
-window.addEventListener('online', this.checkOfflineReviewsStorage);
-window.addEventListener('load', this.checkOfflineReviewsStorage);
+window.addEventListener('online', this.checkOfflineStorage);
+window.addEventListener('load', this.checkOfflineStorage);

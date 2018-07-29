@@ -89,17 +89,25 @@ class DBHelper {
   }
 
   /**
-   * Get saved Restaurants from IndexedDB.
+   * Get saved Restaurants from IndexedDB. If Restaurant's ID is passed
+   * then return only asked Restaurant.
+   * @param {Number} restaurantId Restaurant's ID
    */
-  static getRestaurantsFromDatabase() {
+  static getRestaurantsFromDatabase(restaurantId) {
     return this._dbPromise.then(function (db) {
       if (!db) return false;
 
       const store = db.transaction('restaurants').objectStore('restaurants');
 
-      return store.getAll().then(function (restaurants) {
-        return restaurants;
-      });
+      if (restaurantId) {
+        return store.get(restaurantId).then(function (restaurant) {
+          return restaurant;
+        });
+      } else {
+        return store.getAll().then(function (restaurants) {
+          return restaurants;
+        });
+      }
     });
   }
 
@@ -386,28 +394,37 @@ class DBHelper {
    * @param {Boolean} isFavorite Restaurant's favorite state
    */
   static setRestaurantFavoriteState(restaurantId, isFavorite) {
-    /*
-    ### PUT Endpoints
-
-#### Favorite a restaurant
-```
-http://localhost:1337/restaurants/<restaurant_id>/?is_favorite=true
-```
-
-#### Unfavorite a restaurant
-```
-http://localhost:1337/restaurants/<restaurant_id>/?is_favorite=false
-    */
-
     return fetch(DBHelper.DATABASE_URL + '/restaurants/' + restaurantId + '/?is_favorite=' + isFavorite, {
       method: 'PUT'
     }).then(response => {
       if (response.ok) {
         return response.json().then(data => {
-          console.log(data);
+          // update database with latest data
+          DBHelper.updateRestaurantFavoriteStateInDatabase(restaurantId, isFavorite);
+          return data;
         });
       }
       return Promise.reject(new Error(`Request failed. Returned status of ${response.status}`));
     });
+  }
+
+  /**
+   * Update Restaurant's favorite state in database.
+   * @param {Number} restaurantId Restaurant's ID
+   * @param {Boolean} isFavorite Favorite state
+   */
+  static updateRestaurantFavoriteStateInDatabase(restaurantId, isFavorite) {
+    DBHelper.getRestaurantsFromDatabase(restaurantId)
+      .then(
+        (restaurant) => {
+          if (restaurant) {
+            // update favorite state
+            restaurant.is_favorite = isFavorite;
+            // update restaurant in database
+            DBHelper.saveRestaurantsToDatabase([restaurant]);
+          }
+        },
+        (error) => console.error('Failed to get Restaurant from database!', error)
+      );
   }
 }
