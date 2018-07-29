@@ -45,8 +45,8 @@
           "Sunday": "12:00 pm - 3:00 pm, 5:00 pm - 11:00 pm"
         },
         "createdAt": 1504095568414,
-        "updatedAt": "2018-07-29T18:32:47.777Z",
-        "is_favorite": "false",
+        "updatedAt": "2018-07-29T19:13:13.193Z",
+        "is_favorite": "true",
         "id": 2
       },
       {
@@ -745,6 +745,33 @@
         "createdAt": 1532806118100,
         "updatedAt": "2018-07-28T19:29:06.527Z",
         "id": 56
+      },
+      {
+        "restaurant_id": 2,
+        "name": "asf",
+        "rating": "0",
+        "comments": "safsaf",
+        "createdAt": 1532890276683,
+        "updatedAt": "2018-07-29T18:53:43.072Z",
+        "id": 57
+      },
+      {
+        "restaurant_id": 2,
+        "name": "BBB",
+        "rating": "0",
+        "comments": "ABC",
+        "createdAt": 1532890483737,
+        "updatedAt": "2018-07-29T18:54:43.955Z",
+        "id": 58
+      },
+      {
+        "restaurant_id": 2,
+        "name": "MUSHA",
+        "rating": "4",
+        "comments": "MUSHA",
+        "createdAt": 1532891529976,
+        "updatedAt": "2018-07-29T19:12:10.048Z",
+        "id": 59
       }
     ]
   },
@@ -800,7 +827,7 @@
       "id": 11
     },
     "reviews": {
-      "id": 56
+      "id": 59
     }
   }
 }

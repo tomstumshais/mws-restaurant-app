@@ -291,8 +291,11 @@ addReviewToUI = (review) => {
 }
 
 checkOfflineStorage = () => {
-  const key = 'offline-reviews';
-  const reviewsString = localStorage.getItem(key);
+  const reviewsKey = 'offline-reviews';
+  const favoriteKey = 'offline-favorite';
+  const reviewsString = localStorage.getItem(reviewsKey);
+  const favoriteString = localStorage.getItem(favoriteKey);
+
   if (reviewsString) {
     const promiseArray = [];
     const reviewsJSON = JSON.parse(reviewsString);
@@ -305,8 +308,25 @@ checkOfflineStorage = () => {
     // wait when all reviews are sent, then remove reviews from storage
     Promise.all(promiseArray)
       .then(() => {
-        localStorage.removeItem(key);
+        localStorage.removeItem(reviewsKey);
         console.log('All reviews sent!');
+      });
+  }
+
+  if (favoriteString) {
+    const promiseArray = [];
+    const favoriteJSON = JSON.parse(favoriteString);
+    // create array with request promises
+    favoriteJSON.forEach((favorite) => {
+      const requestPromise = DBHelper.setRestaurantFavoriteState(favorite.restaurantId, favorite.isFavorite);
+      promiseArray.push(requestPromise);
+    });
+
+    // wait when all favorite are sent, then remove favorite from storage
+    Promise.all(promiseArray)
+      .then(() => {
+        localStorage.removeItem(favoriteKey);
+        console.log('All favorites sent!');
       });
   }
 }

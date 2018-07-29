@@ -328,7 +328,7 @@ class DBHelper {
         const reviewsString = JSON.stringify(reviewsJSON);
         localStorage.setItem(key, reviewsString);
 
-        DBHelper.saveOfflineReviewToDataBase(review);
+        DBHelper.saveReviewObjectToDataBase(review);
       } catch (error) {
         console.error('Error while parsing JSON: ', error);
       }
@@ -337,7 +337,7 @@ class DBHelper {
       const reviewsString = JSON.stringify(reviewsJSON);
       localStorage.setItem(key, reviewsString);
 
-      DBHelper.saveOfflineReviewToDataBase(review);
+      DBHelper.saveReviewObjectToDataBase(review);
     }
   }
 
@@ -345,7 +345,7 @@ class DBHelper {
    * Save to database only by one review.
    * @param {Object} review Review's object
    */
-  static saveOfflineReviewToDataBase(review) {
+  static saveReviewObjectToDataBase(review) {
     // get restaurant reviews from database by restaurant's id
     // push new review to this array
     // put back this object with update reviews array
@@ -381,7 +381,11 @@ class DBHelper {
       body: JSON.stringify(review)
     }).then(response => {
       if (response.ok) {
-        return response.json().then(data => data);
+        return response.json().then(data => {
+          // update database with latest data
+          DBHelper.saveReviewObjectToDataBase(review);
+          return data;
+        });
       }
       return Promise.reject(new Error(`Request failed. Returned status of ${response.status}`));
     });
