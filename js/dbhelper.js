@@ -4,7 +4,6 @@
 class DBHelper {
   /**
    * Database URL.
-   * Change this to restaurants.json file location on your server.
    */
   static get DATABASE_URL() {
     const port = 1337; // your server port
@@ -113,6 +112,7 @@ class DBHelper {
 
   /**
    * Fetch a restaurant by its ID.
+   * @param {Number} id Restaurant's id
    */
   static fetchRestaurantById(id) {
     // fetch all restaurants with proper error handling.
@@ -130,6 +130,7 @@ class DBHelper {
 
   /**
    * Fetch restaurants by a cuisine type with proper error handling.
+   * @param {String} cuisine Cuisine type
    */
   static fetchRestaurantByCuisine(cuisine) {
     // Fetch all restaurants  with proper error handling
@@ -140,6 +141,7 @@ class DBHelper {
 
   /**
    * Fetch restaurants by a neighborhood with proper error handling.
+   * @param {String} neighborhood Neighborhood type
    */
   static fetchRestaurantByNeighborhood(neighborhood) {
     // Fetch all restaurants
@@ -150,6 +152,8 @@ class DBHelper {
 
   /**
    * Fetch restaurants by a cuisine and a neighborhood with proper error handling.
+   * @param {String} cuisine Cuisine type
+   * @param {String} neighborhood Neighborhood type
    */
   static fetchRestaurantByCuisineAndNeighborhood(cuisine, neighborhood) {
     // Fetch all restaurants
@@ -196,6 +200,7 @@ class DBHelper {
 
   /**
    * Restaurant page URL.
+   * @param {Object} restaurant Restaurant's object
    */
   static urlForRestaurant(restaurant) {
     return `./restaurant.html?id=${restaurant.id}`;
@@ -203,6 +208,7 @@ class DBHelper {
 
   /**
    * Restaurant image URL.
+   * @param {Object} restaurant Restaurant's object
    */
   static imageUrlForRestaurant(restaurant) {
     if (!restaurant) return '';
@@ -215,6 +221,8 @@ class DBHelper {
 
   /**
    * Map marker for a restaurant.
+   * @param {Object} restaurant Restaurant's object
+   * @param {Object} map Map object
    */
   static mapMarkerForRestaurant(restaurant, map) {
     const marker = new google.maps.Marker({
@@ -274,6 +282,7 @@ class DBHelper {
 
   /**
    * Save Reviews to IndexedDB.
+   * @param {Number} restaurantId Restaurant's ID
    * @param {Array} reviews Array with Reviews
    */
   static saveReviewsToDatabase(restaurantId, reviews) {
@@ -432,6 +441,11 @@ class DBHelper {
       );
   }
 
+  /**
+   * Update Favorite data for offline mode.
+   * @param {Number} restaurantId Restaurant's ID
+   * @param {Boolean} isFavorite Favorite state
+   */
   static saveOfflineFavoriteDataLocally(restaurantId, isFavorite) {
     // TODO: better solution there should be to use localForage library which is async
     const key = 'offline-favorite';

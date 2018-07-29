@@ -31,6 +31,7 @@ window.initMap = () => {
 
 /**
  * Get current restaurant from page URL.
+ * @param {Function} callback
  */
 fetchRestaurantFromURL = (callback) => {
   if (self.restaurant) { // restaurant already fetched!
@@ -53,6 +54,7 @@ fetchRestaurantFromURL = (callback) => {
 
 /**
  * Create restaurant HTML and add it to the webpage
+ * @param {Object} restaurant Restaurant's object
  */
 fillRestaurantHTML = (restaurant = self.restaurant) => {
   const id = restaurant.id;
@@ -91,6 +93,7 @@ fillRestaurantHTML = (restaurant = self.restaurant) => {
 
 /**
  * Create restaurant operating hours HTML table and add it to the webpage.
+ * @param {Object} operatingHours Object which contains operating hours
  */
 fillRestaurantHoursHTML = (operatingHours = self.restaurant.operating_hours) => {
   const hours = document.getElementById('restaurant-hours');
@@ -111,6 +114,7 @@ fillRestaurantHoursHTML = (operatingHours = self.restaurant.operating_hours) => 
 
 /**
  * Add restaurant name to the breadcrumb navigation menu
+ * @param {Object} restaurant Restaurant's object
  */
 fillBreadcrumb = (restaurant = self.restaurant) => {
   const breadcrumb = document.getElementById('breadcrumb');
@@ -121,6 +125,8 @@ fillBreadcrumb = (restaurant = self.restaurant) => {
 
 /**
  * Get a parameter by name from page URL.
+ * @param {String} name Parameter name
+ * @param {String} url URL where to check parameter name
  */
 getParameterByName = (name, url) => {
   if (!url) {
@@ -150,6 +156,7 @@ fetchRestaurantReviews = () => {
 
 /**
  * Create all reviews HTML and add them to the webpage.
+ * @param {Array} reviews Array with reviews
  */
 fillReviewsHTML = (reviews = []) => {
   const container = document.getElementById('reviews-container');
@@ -174,6 +181,7 @@ fillReviewsHTML = (reviews = []) => {
 
 /**
  * Create review HTML and add it to the webpage.
+ * @param {Object} review Review's object
  */
 createReviewHTML = (review) => {
   const li = document.createElement('li');
@@ -207,6 +215,7 @@ createReviewHTML = (review) => {
 
 /**
  * Format Review's date to show properly in UI
+ * @param {Object} review Review's object
  */
 setFormattedDateForReview = (review) => {
   const reviewDate = new Date(review.createdAt);
@@ -240,6 +249,7 @@ addReview = () => {
 
 /**
  * Send Review data to back-end.
+ * @param {Object} review Review's object
  */
 sendReviewData = (review) => {
   DBHelper.addReviewToServer(review)
@@ -256,6 +266,7 @@ sendReviewData = (review) => {
 
 /**
  * Store Review data in IndexedDB.
+ * @param {Object} review Review's object
  */
 storeReviewData = (review) => {
   DBHelper.saveOfflineReviewLocally(review);
@@ -276,6 +287,7 @@ clearReviewForm = () => {
 /**
  * Add new Reviews to UI by one. Previously check if some review is added yet,
  * if not, then remove 'no data' text and remove first one.
+ * @param {Object} review Review's object
  */
 addReviewToUI = (review) => {
   const container = document.getElementById('reviews-container');
@@ -289,7 +301,11 @@ addReviewToUI = (review) => {
     container.appendChild(ul);
   }
 }
-
+/**
+ * Check offline storage on 'online' or 'load' events.
+ * If has stored any data in localStorage, then when network is available,
+ * call service requests to send those data to back-end.
+ */
 checkOfflineStorage = () => {
   const reviewsKey = 'offline-reviews';
   const favoriteKey = 'offline-favorite';
@@ -331,6 +347,10 @@ checkOfflineStorage = () => {
   }
 }
 
+/**
+ * Toggle Restaurant's favorite state.
+ * @param {Boolean} favoriteState Favorite state value
+ */
 toggleRestaurantFavoriteState = (favoriteState) => {
   const restaurantId = self.restaurant.id;
   // implement service call with database update & offline support
@@ -343,6 +363,10 @@ toggleRestaurantFavoriteState = (favoriteState) => {
   }
 }
 
+/**
+ * Update Restaurant's details UI by favorite changes.
+ * @param {Boolean} favoriteState Favorite state value
+ */
 updateFavoriteUI = (favoriteState) => {
   const isFavorite = document.querySelector('.restaurant-favorite-container--is');
   const notFavorite = document.querySelector('.restaurant-favorite--not');
@@ -361,6 +385,11 @@ updateFavoriteUI = (favoriteState) => {
   }
 }
 
+/**
+ * Call service to update favorite state for selected restaurant.
+ * @param {Number} restaurantId Restaurant's ID
+ * @param {Boolean} favoriteState Favorite state value
+ */
 updateFavoriteByService = (restaurantId, isFavorite) => {
   DBHelper.setRestaurantFavoriteState(restaurantId, isFavorite)
     .then((response) => {
@@ -373,6 +402,8 @@ updateFavoriteByService = (restaurantId, isFavorite) => {
 
 /**
  * Store Favorite data update in IndexedDB.
+ * @param {Number} restaurantId Restaurant's ID
+ * @param {Boolean} favoriteState Favorite state value
  */
 updateFavoriteOffline = (restaurantId, isFavorite) => {
   DBHelper.saveOfflineFavoriteDataLocally(restaurantId, isFavorite);

@@ -41,6 +41,7 @@ fetchNeighborhoods = () => {
 
 /**
  * Set neighborhoods HTML.
+ * @param {String} neighborhoods Neighborhoods type
  */
 fillNeighborhoodsHTML = (neighborhoods = self.neighborhoods) => {
   const select = document.getElementById("neighborhoods-select");
@@ -64,6 +65,7 @@ fetchCuisines = () => {
 
 /**
  * Set cuisines HTML.
+ * @param {String} cuisines Cuisines type
  */
 fillCuisinesHTML = (cuisines = self.cuisines) => {
   const select = document.getElementById("cuisines-select");
@@ -123,8 +125,9 @@ updateRestaurants = () => {
 
 /**
  * Clear current restaurants, their HTML and remove their map markers.
+ * @param {Array} restaurants Array of Restaurants
  */
-resetRestaurants = restaurants => {
+resetRestaurants = (restaurants) => {
   // Remove all restaurants
   self.restaurants = [];
   const ul = document.getElementById("restaurants-list");
@@ -138,6 +141,7 @@ resetRestaurants = restaurants => {
 
 /**
  * Create all restaurants HTML and add them to the webpage.
+ * @param {Array} restaurants Array of Restaurants
  */
 fillRestaurantsHTML = (restaurants = self.restaurants) => {
   const ul = document.getElementById("restaurants-list");
@@ -149,6 +153,7 @@ fillRestaurantsHTML = (restaurants = self.restaurants) => {
 
 /**
  * Create restaurant HTML.
+ * @param {Object} restaurant Restaurant's object
  */
 createRestaurantHTML = restaurant => {
   const id = restaurant.id;
@@ -197,6 +202,7 @@ createRestaurantHTML = restaurant => {
 
 /**
  * Add markers for current restaurants to the map.
+ * @param {Array} restaurants Array of Restaurants
  */
 addMarkersToMap = (restaurants = self.restaurants) => {
   restaurants.forEach(restaurant => {
