@@ -312,20 +312,25 @@ checkOfflineStorage = () => {
 }
 
 toggleRestaurantFavoriteState = (favoriteState) => {
-  //TODO:
+  const restaurantId = self.restaurant.id;
   // implement service call with database update & offline support
   if (navigator.onLine) {
     // user is online, call request to update favorite
-    this.updateFavoriteByService(self.restaurant.id, favoriteState);
+    this.updateFavoriteByService(restaurantId, favoriteState);
   } else {
     // user is offline, store data localy
-    this.storeReviewData(review);
+    this.updateFavoriteOffline(restaurantId, favoriteState);
   }
 }
 
 updateFavoriteUI = (favoriteState) => {
   const isFavorite = document.querySelector('.restaurant-favorite-container--is');
   const notFavorite = document.querySelector('.restaurant-favorite--not');
+
+  // type fix
+  if (typeof favoriteState === 'string') {
+    favoriteState = (favoriteState === 'true') ? true : false;
+  }
 
   if (favoriteState) {
     isFavorite.classList.remove('hidden');
@@ -339,12 +344,20 @@ updateFavoriteUI = (favoriteState) => {
 updateFavoriteByService = (restaurantId, isFavorite) => {
   DBHelper.setRestaurantFavoriteState(restaurantId, isFavorite)
     .then((response) => {
-      console.log(response);
       this.updateFavoriteUI(isFavorite);
     })
     .catch((error) => {
       console.error('Favorite update service down: ' + error);
     });
+}
+
+/**
+ * Store Favorite data update in IndexedDB.
+ */
+updateFavoriteOffline = (restaurantId, isFavorite) => {
+  DBHelper.saveOfflineFavoriteDataLocally(restaurantId, isFavorite);
+  this.updateFavoriteUI(isFavorite);
+  console.log('Favorite updated to IndexedDB!');
 }
 
 /**

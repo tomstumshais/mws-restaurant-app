@@ -66,18 +66,19 @@ self.addEventListener('fetch', function (event) {
         return response || fetchAndCache(event.request, DATA_CACHE);
       })
     );
-  } else {
-    // respond to remote requests
-    event.respondWith(
-      caches.match(event.request).then(function (response) {
-        return response || fetchAndCache(event.request, REMOTE_CACHE);
-      }).catch(error => {
-        // error logging
-        console.log(event);
-        console.error('Failed to fetch!', error);
-      })
-    );
   }
+  // else {
+  //   // respond to remote requests
+  //   event.respondWith(
+  //     caches.match(event.request).then(function (response) {
+  //       return response || fetchAndCache(event.request, REMOTE_CACHE);
+  //     }).catch(error => {
+  //       // error logging
+  //       console.log(event);
+  //       console.error('Failed to fetch!', error);
+  //     })
+  //   );
+  // }
 });
 
 /**

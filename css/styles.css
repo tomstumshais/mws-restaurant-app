@@ -429,14 +429,6 @@ nav h1 a {
 
 /* ====================== Restaurant Review Form ====================== */
 
-.show {
-  display: block;
-}
-
-.hidden {
-  display: none;
-}
-
 .favorite-button {
   margin: 0px;
   width: auto;

@@ -427,4 +427,46 @@ class DBHelper {
         (error) => console.error('Failed to get Restaurant from database!', error)
       );
   }
+
+  static saveOfflineFavoriteDataLocally(restaurantId, isFavorite) {
+    // TODO: better solution there should be to use localForage library which is async
+    const key = 'offline-favorite';
+    // check if exists any items
+    const offlineFavorite = localStorage.getItem(key);
+    if (offlineFavorite) {
+      try {
+        const favoriteJSON = JSON.parse(offlineFavorite);
+
+        // overwrite same restaurant's favorite state
+        const selectedRestaurant = favoriteJSON.find((item) => {
+          return item.restaurantId === restaurantId;
+        });
+
+        if (selectedRestaurant) {
+          selectedRestaurant.isFavorite = isFavorite;
+        } else {
+          favoriteJSON.push({
+            restaurantId,
+            isFavorite,
+          });
+        }
+
+        const favoriteString = JSON.stringify(favoriteJSON);
+        localStorage.setItem(key, favoriteString);
+
+        DBHelper.updateRestaurantFavoriteStateInDatabase(restaurantId, isFavorite);
+      } catch (error) {
+        console.error('Error while parsing JSON: ', error);
+      }
+    } else {
+      const favoriteJSON = [{
+        restaurantId,
+        isFavorite,
+      }];
+      const favoriteString = JSON.stringify(favoriteJSON);
+      localStorage.setItem(key, favoriteString);
+
+      DBHelper.updateRestaurantFavoriteStateInDatabase(restaurantId, isFavorite);
+    }
+  }
 }
