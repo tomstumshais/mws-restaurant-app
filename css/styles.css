@@ -157,6 +157,10 @@ nav h1 a {
 
 /* ====================== Map ====================== */
 
+.map-container {
+  display: none;
+}
+
 #map {
   height: 400px;
   width: 100%;
@@ -183,6 +187,16 @@ nav h1 a {
 
 .filter-options div {
   display: flex;
+}
+
+.filter-options__header {
+  justify-content: space-between;
+}
+
+.map-link {
+  font-size: 0.9rem;
+  margin-right: 20px;
+  padding-top: 5px;
 }
 
 .filter-options select {

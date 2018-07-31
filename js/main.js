@@ -9,8 +9,19 @@ var markers = [];
  */
 document.addEventListener("DOMContentLoaded", (event) => {
   registerServiceWorker();
-  fetchNeighborhoods();
-  fetchCuisines();
+
+  const neighborhoodsPromise = DBHelper.fetchNeighborhoods();
+  const cuisinesPromise = DBHelper.fetchCuisines();
+
+  Promise.all([neighborhoodsPromise, cuisinesPromise])
+    .then((values) => {
+      self.neighborhoods = values[0]; // neighborhoods
+      self.cuisines = values[1]; // cuisines
+      fillCuisinesHTML();
+      fillNeighborhoodsHTML();
+
+      updateRestaurants();
+    });
 });
 
 /**
@@ -32,12 +43,13 @@ registerServiceWorker = () => {
 /**
  * Fetch all neighborhoods and set their HTML.
  */
-fetchNeighborhoods = () => {
-  DBHelper.fetchNeighborhoods().then(neighborhoods => {
-    self.neighborhoods = neighborhoods;
-    fillNeighborhoodsHTML();
-  });
-};
+// fetchNeighborhoods = () => {
+//   return DBHelper.fetchNeighborhoods()
+//     .then(neighborhoods => {
+//       self.neighborhoods = neighborhoods;
+//       fillNeighborhoodsHTML();
+//     });
+// };
 
 /**
  * Set neighborhoods HTML.
@@ -56,12 +68,12 @@ fillNeighborhoodsHTML = (neighborhoods = self.neighborhoods) => {
 /**
  * Fetch all cuisines and set their HTML.
  */
-fetchCuisines = () => {
-  DBHelper.fetchCuisines().then(cuisines => {
-    self.cuisines = cuisines;
-    fillCuisinesHTML();
-  });
-};
+// fetchCuisines = () => {
+//   DBHelper.fetchCuisines().then(cuisines => {
+//     self.cuisines = cuisines;
+//     fillCuisinesHTML();
+//   });
+// };
 
 /**
  * Set cuisines HTML.
@@ -101,7 +113,7 @@ window.initMap = () => {
     });
   });
 
-  updateRestaurants();
+  // updateRestaurants();
 };
 
 /**
@@ -148,7 +160,7 @@ fillRestaurantsHTML = (restaurants = self.restaurants) => {
   restaurants.forEach(restaurant => {
     ul.append(createRestaurantHTML(restaurant));
   });
-  addMarkersToMap();
+  // addMarkersToMap();
 };
 
 /**
