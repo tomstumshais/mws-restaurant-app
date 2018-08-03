@@ -157,8 +157,14 @@ nav h1 a {
 
 /* ====================== Map ====================== */
 
-.map-container {
+/* .map-container {
   display: none;
+} */
+
+.map-container__load-button {
+  position: absolute;
+  top: 200px;
+  left: calc((100% / 2) - 30px);
 }
 
 #map {
