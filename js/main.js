@@ -13,6 +13,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
   const neighborhoodsPromise = DBHelper.fetchNeighborhoods();
   const cuisinesPromise = DBHelper.fetchCuisines();
 
+  // get necessary data for Restaurant load
   Promise.all([neighborhoodsPromise, cuisinesPromise])
     .then((values) => {
       self.neighborhoods = values[0]; // neighborhoods
@@ -41,17 +42,6 @@ registerServiceWorker = () => {
 };
 
 /**
- * Fetch all neighborhoods and set their HTML.
- */
-// fetchNeighborhoods = () => {
-//   return DBHelper.fetchNeighborhoods()
-//     .then(neighborhoods => {
-//       self.neighborhoods = neighborhoods;
-//       fillNeighborhoodsHTML();
-//     });
-// };
-
-/**
  * Set neighborhoods HTML.
  * @param {String} neighborhoods Neighborhoods type
  */
@@ -64,16 +54,6 @@ fillNeighborhoodsHTML = (neighborhoods = self.neighborhoods) => {
     select.append(option);
   });
 };
-
-/**
- * Fetch all cuisines and set their HTML.
- */
-// fetchCuisines = () => {
-//   DBHelper.fetchCuisines().then(cuisines => {
-//     self.cuisines = cuisines;
-//     fillCuisinesHTML();
-//   });
-// };
 
 /**
  * Set cuisines HTML.
@@ -91,9 +71,9 @@ fillCuisinesHTML = (cuisines = self.cuisines) => {
 };
 
 /**
- * Initialize Google map, called from HTML.
+ * Initialize Google map on button click.
  */
-window.initMap = () => {
+initializeMap = () => {
   let loc = {
     lat: 40.722216,
     lng: -73.987501
@@ -113,7 +93,7 @@ window.initMap = () => {
     });
   });
 
-  // updateRestaurants();
+  addMarkersToMap();
 };
 
 /**
@@ -160,7 +140,6 @@ fillRestaurantsHTML = (restaurants = self.restaurants) => {
   restaurants.forEach(restaurant => {
     ul.append(createRestaurantHTML(restaurant));
   });
-  // addMarkersToMap();
 };
 
 /**

@@ -164,15 +164,12 @@
     <a href="#filters-container" class="skip-link">Skip Google Map</a>
     <section id="map-container" class="map-container">
       <div id="map" role="application" aria-label="Restaurants map of New York">
-        <button class="map-container__load-button">Load Map</button>
+        <button class="map-container__load-button" onclick="initializeMap()">Load Map</button>
       </div>
     </section>
     <section id="filters-container">
       <div class="filter-options">
-        <div class="filter-options__header">
-          <h2>Filter Results</h2>
-          <a class="map-link" onclick="">Open Map</a>
-        </div>
+        <h2>Filter Results</h2>
         <div>
           <select id="neighborhoods-select" name="neighborhoods" aria-label="Filter option for neighborhoods" onchange="updateRestaurants()">
             <option value="all">All Neighborhoods</option>
@@ -223,7 +220,7 @@
   <script charset="utf-8" src="js/lib/idb.js"></script>
   <script charset="utf-8" src="js/dbhelper.js"></script>
   <script charset="utf-8" src="js/main.js"></script>
-  <!-- <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCaRY2jncjFvVfgq_lM8O2fI2vTaFjgW0M&libraries=places&callback=initMap"></script> -->
+  <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCaRY2jncjFvVfgq_lM8O2fI2vTaFjgW0M&libraries=places"></script>
 
 </body>
 
