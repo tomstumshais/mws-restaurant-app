@@ -7,22 +7,21 @@ var markers = [];
 /**
  * Fetch neighborhoods and cuisines as soon as the page is loaded.
  */
-document.addEventListener("DOMContentLoaded", (event) => {
+document.addEventListener('DOMContentLoaded', event => {
   registerServiceWorker();
 
   const neighborhoodsPromise = DBHelper.fetchNeighborhoods();
   const cuisinesPromise = DBHelper.fetchCuisines();
 
   // get necessary data for Restaurant load
-  Promise.all([neighborhoodsPromise, cuisinesPromise])
-    .then((values) => {
-      self.neighborhoods = values[0]; // neighborhoods
-      self.cuisines = values[1]; // cuisines
-      fillCuisinesHTML();
-      fillNeighborhoodsHTML();
+  Promise.all([neighborhoodsPromise, cuisinesPromise]).then(values => {
+    self.neighborhoods = values[0]; // neighborhoods
+    self.cuisines = values[1]; // cuisines
+    fillCuisinesHTML();
+    fillNeighborhoodsHTML();
 
-      updateRestaurants();
-    });
+    updateRestaurants();
+  });
 });
 
 /**
@@ -32,12 +31,12 @@ registerServiceWorker = () => {
   if (!navigator.serviceWorker) return;
 
   navigator.serviceWorker
-    .register("/sw.js")
+    .register('/sw.js')
     .then(() => {
-      console.log("Service Worker registered!");
+      console.log('Service Worker registered!');
     })
     .catch(() => {
-      console.log("Error while registering Service Worker!");
+      console.log('Error while registering Service Worker!');
     });
 };
 
@@ -46,9 +45,9 @@ registerServiceWorker = () => {
  * @param {String} neighborhoods Neighborhoods type
  */
 fillNeighborhoodsHTML = (neighborhoods = self.neighborhoods) => {
-  const select = document.getElementById("neighborhoods-select");
+  const select = document.getElementById('neighborhoods-select');
   neighborhoods.forEach(neighborhood => {
-    const option = document.createElement("option");
+    const option = document.createElement('option');
     option.innerHTML = neighborhood;
     option.value = neighborhood;
     select.append(option);
@@ -60,10 +59,10 @@ fillNeighborhoodsHTML = (neighborhoods = self.neighborhoods) => {
  * @param {String} cuisines Cuisines type
  */
 fillCuisinesHTML = (cuisines = self.cuisines) => {
-  const select = document.getElementById("cuisines-select");
+  const select = document.getElementById('cuisines-select');
 
   cuisines.forEach(cuisine => {
-    const option = document.createElement("option");
+    const option = document.createElement('option');
     option.innerHTML = cuisine;
     option.value = cuisine;
     select.append(option);
@@ -79,17 +78,17 @@ initializeMap = () => {
     lng: -73.987501
   };
 
-  self.map = new google.maps.Map(document.getElementById("map"), {
+  self.map = new google.maps.Map(document.getElementById('map'), {
     zoom: 12,
     center: loc,
     scrollwheel: false
   });
 
   // set title for all iframe elements in Google Maps container
-  google.maps.event.addListenerOnce(self.map, "idle", () => {
-    const mapFrames = document.querySelectorAll("#map iframe");
+  google.maps.event.addListenerOnce(self.map, 'idle', () => {
+    const mapFrames = document.querySelectorAll('#map iframe');
     mapFrames.forEach(frame => {
-      frame.setAttribute("title", "Google Maps");
+      frame.setAttribute('title', 'Google Maps');
     });
   });
 
@@ -100,8 +99,8 @@ initializeMap = () => {
  * Update page and map for current restaurants.
  */
 updateRestaurants = () => {
-  const cSelect = document.getElementById("cuisines-select");
-  const nSelect = document.getElementById("neighborhoods-select");
+  const cSelect = document.getElementById('cuisines-select');
+  const nSelect = document.getElementById('neighborhoods-select');
 
   const cIndex = cSelect.selectedIndex;
   const nIndex = nSelect.selectedIndex;
@@ -119,11 +118,11 @@ updateRestaurants = () => {
  * Clear current restaurants, their HTML and remove their map markers.
  * @param {Array} restaurants Array of Restaurants
  */
-resetRestaurants = (restaurants) => {
+resetRestaurants = restaurants => {
   // Remove all restaurants
   self.restaurants = [];
-  const ul = document.getElementById("restaurants-list");
-  ul.innerHTML = "";
+  const ul = document.getElementById('restaurants-list');
+  ul.innerHTML = '';
 
   // Remove all map markers
   self.markers.forEach(m => m.setMap(null));
@@ -136,10 +135,15 @@ resetRestaurants = (restaurants) => {
  * @param {Array} restaurants Array of Restaurants
  */
 fillRestaurantsHTML = (restaurants = self.restaurants) => {
-  const ul = document.getElementById("restaurants-list");
+  const ul = document.getElementById('restaurants-list');
   restaurants.forEach(restaurant => {
     ul.append(createRestaurantHTML(restaurant));
   });
+
+  // when map is loaded then only update markers by restaurant selection
+  if (self.map) {
+    addMarkersToMap();
+  }
 };
 
 /**
@@ -148,11 +152,11 @@ fillRestaurantsHTML = (restaurants = self.restaurants) => {
  */
 createRestaurantHTML = restaurant => {
   const id = restaurant.id;
-  const li = document.createElement("li");
-  li.setAttribute("aria-label", `List item for ${restaurant.name} restaurant`);
+  const li = document.createElement('li');
+  li.setAttribute('aria-label', `List item for ${restaurant.name} restaurant`);
 
-  const image = document.createElement("img");
-  image.className = "restaurant-img";
+  const image = document.createElement('img');
+  image.className = 'restaurant-img';
   image.src = DBHelper.imageUrlForRestaurant(restaurant);
   // handle responsive images for different resolutions
   image.srcset = `
@@ -162,29 +166,23 @@ createRestaurantHTML = restaurant => {
   image.alt = `Picture from ${restaurant.name} restaurant`;
   li.append(image);
 
-  const name = document.createElement("h2");
-  name.setAttribute("aria-label", `Restaurant name is ${restaurant.name}`);
+  const name = document.createElement('h2');
+  name.setAttribute('aria-label', `Restaurant name is ${restaurant.name}`);
   name.innerHTML = restaurant.name;
   li.append(name);
 
-  const neighborhood = document.createElement("p");
-  neighborhood.setAttribute(
-    "aria-label",
-    `Restaurant neighborhood is ${restaurant.neighborhood}`
-  );
+  const neighborhood = document.createElement('p');
+  neighborhood.setAttribute('aria-label', `Restaurant neighborhood is ${restaurant.neighborhood}`);
   neighborhood.innerHTML = restaurant.neighborhood;
   li.append(neighborhood);
 
-  const address = document.createElement("p");
-  address.setAttribute(
-    "aria-label",
-    `Restaurant address is ${restaurant.address}`
-  );
+  const address = document.createElement('p');
+  address.setAttribute('aria-label', `Restaurant address is ${restaurant.address}`);
   address.innerHTML = restaurant.address;
   li.append(address);
 
-  const more = document.createElement("a");
-  more.innerHTML = "View Details";
+  const more = document.createElement('a');
+  more.innerHTML = 'View Details';
   more.href = DBHelper.urlForRestaurant(restaurant);
   li.append(more);
 
@@ -199,7 +197,7 @@ addMarkersToMap = (restaurants = self.restaurants) => {
   restaurants.forEach(restaurant => {
     // Add marker to the map
     const marker = DBHelper.mapMarkerForRestaurant(restaurant, self.map);
-    google.maps.event.addListener(marker, "click", () => {
+    google.maps.event.addListener(marker, 'click', () => {
       window.location.href = marker.url;
     });
     self.markers.push(marker);
