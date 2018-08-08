@@ -123,6 +123,17 @@
       display: flex;
     }
 
+    .filter-options-header {
+      justify-content: space-between;
+    }
+
+    .open-map-button {
+      margin: 5px 20px 0 20px;
+      /* padding-top: 5px; */
+      font-size: 1rem;
+      line-height: 1;
+    }
+
     .filter-options select {
       background-color: white;
       border: 1px solid #fff;
@@ -148,6 +159,10 @@
       flex-wrap: wrap;
       justify-content: center;
     }
+
+    .hidden {
+      display: none;
+    }
   </style>
 </head>
 
@@ -161,15 +176,17 @@
   </header>
 
   <main id="maincontent">
-    <a href="#filters-container" class="skip-link">Skip Google Map</a>
-    <section id="map-container" class="map-container">
+    <section id="map-container" class="map-container hidden" tabindex="0">
+      <a href="#filters-container" class="skip-link">Skip Google Map</a>
       <div id="map" role="application" aria-label="Restaurants map of New York">
-        <button class="map-container__load-button" onclick="initializeMap()">Load Map</button>
       </div>
     </section>
     <section id="filters-container">
       <div class="filter-options">
-        <h2>Filter Results</h2>
+        <div class="filter-options-header">
+          <h2>Filter Results</h2>
+          <button class="open-map-button" onclick="toggleMap()">Open Map</button>
+        </div>
         <div>
           <select id="neighborhoods-select" name="neighborhoods" aria-label="Filter option for neighborhoods" onchange="updateRestaurants()">
             <option value="all">All Neighborhoods</option>

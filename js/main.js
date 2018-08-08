@@ -70,7 +70,29 @@ fillCuisinesHTML = (cuisines = self.cuisines) => {
 };
 
 /**
- * Initialize Google map on button click.
+ * Toggle map container visibility and button name.
+ */
+toggleMap = () => {
+  const openMapLink = document.querySelector('.open-map-button');
+  const mapContainer = document.querySelector('.map-container');
+
+  // toggle map container state
+  mapContainer.classList.toggle('hidden');
+  if (openMapLink.textContent === 'Open Map') {
+    openMapLink.textContent = 'Hide Map';
+    mapContainer.focus();
+  } else {
+    openMapLink.textContent = 'Open Map';
+  }
+
+  // for first time, initialize map
+  if (!self.map) {
+    initializeMap();
+  }
+};
+
+/**
+ * Initialize Google map and add markers to it.
  */
 initializeMap = () => {
   let loc = {

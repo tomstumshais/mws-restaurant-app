@@ -79,14 +79,6 @@ section {
 
 /* ====================== Map ====================== */
 
-.map-container__load-button {
-  height: 44px;
-  width: 100px;
-  position: absolute;
-  top: 250px;
-  left: calc((100% / 2) - 50px);
-}
-
 /* ====================== Restaurant Filtering ====================== */
 
 /* ====================== Restaurant Listing ====================== */
