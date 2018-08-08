@@ -148,11 +148,15 @@
       <div class="restaurant-favorite-container--is hidden">
         <div class="restaurant-favorite--is">
           <p>!!! It's your favorite !!!</p>
-          <button class="favorite-button" onclick="toggleRestaurantFavoriteState(false)">X</button>
+          <button aria-label="Remove Restaurant from favorite" class="favorite-button" onclick="toggleRestaurantFavoriteState(false)">
+            X
+          </button>
         </div>
       </div>
       <div class="restaurant-favorite--not hidden">
-        <button class="favorite-button" onclick="toggleRestaurantFavoriteState(true)">Set as favorite</button>
+        <button aria-label="Set Restaurant as favorite" class="favorite-button" onclick="toggleRestaurantFavoriteState(true)">
+          Set as favorite
+        </button>
       </div>
       <!-- End of Restaurant's favorites block -->
       <p id="restaurant-address"></p>

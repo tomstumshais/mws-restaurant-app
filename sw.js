@@ -67,18 +67,6 @@ self.addEventListener('fetch', function (event) {
       })
     );
   }
-  // else {
-  //   // respond to remote requests
-  //   event.respondWith(
-  //     caches.match(event.request).then(function (response) {
-  //       return response || fetchAndCache(event.request, REMOTE_CACHE);
-  //     }).catch(error => {
-  //       // error logging
-  //       console.log(event);
-  //       console.error('Failed to fetch!', error);
-  //     })
-  //   );
-  // }
 });
 
 /**
