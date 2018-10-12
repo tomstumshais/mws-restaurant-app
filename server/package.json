@@ -5,9 +5,11 @@
   "description": "a Sails application",
   "keywords": [],
   "dependencies": {
+    "deep-extend": "^0.6.0",
     "ejs": "^2.6.1",
     "include-all": "^1.0.0",
     "method-override": "^3.0.0",
+    "negotiator": "^0.6.1",
     "rc": "1.0.1",
     "sails": "^0.12.13",
     "sails-disk": "~0.10.9"
