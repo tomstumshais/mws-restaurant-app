@@ -10,7 +10,7 @@
     "ejs": "^2.6.1",
     "fresh": "^0.5.2",
     "include-all": "^4.0.3",
-    "lodash": "^4.17.11",
+    "lodash": "^4.17.21",
     "method-override": "^3.0.0",
     "mime": "^2.3.1",
     "negotiator": "^0.6.1",
